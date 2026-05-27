@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MENLUN — Sistema de Leads</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1D9E75;
+  --green-light: #E1F5EE;
+  --green-dark: #085041;
+  --amber: #EF9F27;
+  --amber-light: #FAEEDA;
+  --blue: #378ADD;
+  --blue-light: #E6F1FB;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --gray-50: #F8F8F6;
+  --gray-100: #F1EFE8;
+  --gray-200: #D3D1C7;
+  --gray-400: #888780;
+  --gray-600: #5F5E5A;
+  --gray-800: #2C2C2A;
+  --white: #FFFFFF;
+  --border: rgba(0,0,0,0.08);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-pill: 20px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 14px; min-height: 100vh; }
+
+/* TOPBAR */
+.topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.logo-mark { width: 32px; height: 32px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-mark svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; }
+.logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+.logo-text span { color: var(--green); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.total-pill { background: var(--gray-100); border-radius: var(--radius-pill); padding: 5px 14px; font-size: 13px; color: var(--gray-600); }
+.total-pill b { color: var(--gray-800); font-weight: 600; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-700); font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn:hover { background: var(--gray-50); }
+.btn-primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+
+/* METRICS */
+.metrics-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.metric { padding: 12px 16px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--white); }
+.metric-label { font-size: 11px; font-weight: 500; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.metric-val { font-size: 24px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
+.metric-sub { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot-total { background: var(--green); }
+.dot-platino { background: var(--blue); }
+.dot-oro { background: var(--amber); }
+.dot-plata { background: var(--gray-400); }
+.dot-bronce { background: var(--coral); }
+
+/* FILTERS */
+.filters-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
+.search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--gray-400); fill: none; stroke-width: 2; pointer-events: none; }
+.search-input { width: 100%; padding: 7px 10px 7px 32px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); transition: all 0.15s; }
+.search-input:focus { outline: none; border-color: var(--green); background: var(--white); }
+.filter-select { padding: 7px 28px 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; transition: all 0.15s; }
+.filter-select:focus { outline: none; border-color: var(--green); background-color: var(--white); }
+.active-filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-light); color: var(--green-dark); padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
+.filter-tag button { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
+.results-count { font-size: 12px; color: var(--gray-400); margin-left: auto; white-space: nowrap; }
+
+/* LAYOUT */
+.app-body { display: flex; min-height: calc(100vh - 56px - 80px - 48px); }
+
+/* TABLE */
+.table-section { flex: 1; padding: 20px 24px; overflow: hidden; }
+.table-wrap { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); }
+.table-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-header-title { font-size: 13px; font-weight: 500; color: var(--gray-600); }
+table { width: 100%; border-collapse: collapse; }
+th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: var(--gray-50); white-space: nowrap; cursor: pointer; user-select: none; }
+th:hover { color: var(--gray-600); }
+th .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; }
+td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #F9FBF9; }
+.empresa-name { font-weight: 500; font-size: 13px; color: var(--gray-800); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.giro-text { font-size: 12px; color: var(--gray-400); max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* BADGES */
+.tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; white-space: nowrap; }
+.tier-platino { background: var(--blue-light); color: #0C447C; }
+.tier-oro { background: var(--amber-light); color: #633806; }
+.tier-plata { background: var(--gray-100); color: var(--gray-600); }
+.tier-bronce { background: var(--coral-light); color: #4A1B0C; }
+.tier-sin { background: var(--gray-100); color: var(--gray-600); }
+.sector-badge { display: inline-block; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 500; }
+.s-alimentos { background: #EAF3DE; color: #27500A; }
+.s-bebidas { background: #E6F1FB; color: #0C447C; }
+.s-farmaceutico { background: #EEEDFE; color: #26215C; }
+.s-hospitales { background: #FAECE7; color: #4A1B0C; }
+.s-hoteles { background: #FAEEDA; color: #633806; }
+.s-institucional { background: #FBEAF0; color: #4B1528; }
+.s-otro { background: var(--gray-100); color: var(--gray-600); }
+.estatus-badge { display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
+.estatus-badge:hover { opacity: 0.8; }
+.e-nuevo { background: #EAF3DE; color: #27500A; }
+.e-contactado { background: var(--blue-light); color: #0C447C; }
+.e-calificado { background: var(--amber-light); color: #633806; }
+.e-cliente { background: var(--green-light); color: var(--green-dark); }
+
+/* ROW ACTIONS */
+.row-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+tr:hover .row-actions { opacity: 1; }
+.row-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--gray-400); font-size: 13px; transition: all 0.15s; }
+.row-btn:hover { background: var(--gray-50); color: var(--gray-800); border-color: var(--gray-200); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: var(--radius); width: 480px; max-width: 95vw; box-shadow: var(--shadow-md); overflow: hidden; }
+.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close { background: none; border: none; cursor: pointer; color: var(--gray-400); font-size: 20px; line-height: 1; padding: 0; }
+.modal-close:hover { color: var(--gray-800); }
+.modal-body { padding: 20px 24px; }
+.modal-field { margin-bottom: 16px; }
+.modal-label { font-size: 12px; font-weight: 500; color: var(--gray-600); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.modal-value { font-size: 14px; color: var(--gray-800); }
+.modal-value.muted { color: var(--gray-400); }
+.estatus-select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
+.vendedor-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
+.notas-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 80px; resize: vertical; }
+.vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: var(--green); background: var(--white); }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+.modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* PAGINATION */
+.pagination { background: var(--white); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+.page-info { font-size: 12px; color: var(--gray-400); }
+.page-btns { display: flex; gap: 4px; }
+.page-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-600); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; transition: all 0.15s; }
+.page-btn:hover { background: var(--gray-50); border-color: var(--gray-200); }
+.page-btn.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--gray-800); color: #fff; padding: 10px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 500; z-index: 300; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* LOADING */
+.loading-row td { text-align: center; padding: 48px; color: var(--gray-400); font-size: 14px; }
+.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--gray-200); border-top-color: var(--green); border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ZONA BARS */
+.zona-row { display: flex; gap: 16px; align-items: center; padding: 10px 24px; background: var(--gray-50); border-bottom: 1px solid var(--border); }
+.zona-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--gray-600); }
+.zona-dot { width: 8px; height: 8px; border-radius: 50%; }
+.zona-label { font-weight: 500; }
+.zona-count { color: var(--gray-400); }
+
+/* EMPTY */
+.empty-state { text-align: center; padding: 60px 24px; color: var(--gray-400); }
+.empty-state svg { width: 48px; height: 48px; stroke: var(--gray-200); fill: none; stroke-width: 1.5; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+@media (max-width: 768px) {
+  .metrics-bar { grid-template-columns: repeat(2, 1fr); }
+  .zona-row { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+    </div>
+    <div>
+      <div class="logo-text">MEN<span>LUN</span> Leads</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="total-pill">Total: <b id="total-count">—</b> prospectos</div>
+    <button class="btn" onclick="exportCSV()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Exportar CSV
+    </button>
+  </div>
+</div>
+
+<!-- METRICS -->
+<div class="metrics-bar">
+  <div class="metric">
+    <div class="metric-label"><span class="dot dot-total"></span> Total leads</div>
+    <div class="metric-val" id="m-total">—</div>
+    <div class="metric-sub">18 estados</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="dot dot-platino"></span> Platino</div>
+    <div class="metric-val" id="m-platino" style="color:var(--blue)">—</div>
+    <div class="metric-sub">+$2,000,000</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="dot dot-oro"></span> Oro</div>
+    <div class="metric-val" id="m-oro" style="color:var(--amber)">—</div>
+    <div class="metric-sub">$200K – $1M</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="dot dot-plata"></span> Plata</div>
+    <div class="metric-val" id="m-plata" style="color:var(--gray-400)">—</div>
+    <div class="metric-sub">$200K – $500K</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="dot dot-bronce"></span> Bronce</div>
+    <div class="metric-val" id="m-bronce" style="color:var(--coral)">—</div>
+    <div class="metric-sub">–$200,000</div>
+  </div>
+</div>
+
+<!-- ZONA BARS -->
+<div class="zona-row">
+  <div class="zona-item"><div class="zona-dot" style="background:var(--green)"></div><span class="zona-label">Centro</span><span class="zona-count" id="z-centro">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--blue)"></div><span class="zona-label">Norte</span><span class="zona-count" id="z-norte">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--amber)"></div><span class="zona-label">Bajío</span><span class="zona-count" id="z-bajio">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--coral)"></div><span class="zona-label">Sur</span><span class="zona-count" id="z-sur">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--gray-200)"></div><span class="zona-label">Sin zona</span><span class="zona-count" id="z-sinzona">—</span></div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="search-input" id="search" placeholder="Buscar empresa..." oninput="applyFilters()">
+  </div>
+  <select class="filter-select" id="f-tier" onchange="applyFilters()">
+    <option value="">Todos los tiers</option>
+    <option value="Platino">🔵 Platino</option>
+    <option value="Oro">🟡 Oro</option>
+    <option value="Plata">⚪ Plata</option>
+    <option value="Bronce">🟤 Bronce</option>
+    <option value="Sin clasificar">Sin clasificar</option>
+  </select>
+  <select class="filter-select" id="f-sector" onchange="applyFilters()">
+    <option value="">Todos los sectores</option>
+    <option value="Alimentos">Alimentos</option>
+    <option value="Bebidas">Bebidas</option>
+    <option value="Farmaceutico">Farmacéutico</option>
+    <option value="Hospitales">Hospitales</option>
+    <option value="Hoteles">Hoteles</option>
+    <option value="Institucional">Institucional</option>
+  </select>
+  <select class="filter-select" id="f-zona" onchange="applyFilters()">
+    <option value="">Todas las zonas</option>
+    <option value="Centro">Centro</option>
+    <option value="Norte">Norte</option>
+    <option value="Bajio">Bajío</option>
+    <option value="Sur">Sur</option>
+  </select>
+  <select class="filter-select" id="f-estado" onchange="applyFilters()">
+    <option value="">Todos los estados</option>
+  </select>
+  <select class="filter-select" id="f-estatus" onchange="applyFilters()">
+    <option value="">Todos los estatus</option>
+    <option value="Nuevo">Nuevo</option>
+    <option value="Contactado">Contactado</option>
+    <option value="Calificado">Calificado</option>
+    <option value="Cliente">Cliente</option>
+  </select>
+  <button class="btn" onclick="clearFilters()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    Limpiar
+  </button>
+  <span class="results-count" id="results-count"></span>
+</div>
+
+<!-- TABLE -->
+<div class="app-body">
+  <div class="table-section">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('nombre_establecimiento')">Empresa <span class="sort-icon">↕</span></th>
+            <th>Giro</th>
+            <th onclick="sortBy('sector')">Sector <span class="sort-icon">↕</span></th>
+            <th onclick="sortBy('tier')">Tier <span class="sort-icon">↕</span></th>
+            <th onclick="sortBy('municipio')">Municipio <span class="sort-icon">↕</span></th>
+            <th onclick="sortBy('estado')">Estado <span class="sort-icon">↕</span></th>
+            <th>Zona</th>
+            <th onclick="sortBy('estatus')">Estatus <span class="sort-icon">↕</span></th>
+            <th>Vendedor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr class="loading-row"><td colspan="10"><span class="spinner"></span>Cargando prospectos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGINATION -->
+<div class="pagination">
+  <div class="page-info" id="page-info">—</div>
+  <div class="page-btns" id="page-btns"></div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Editar lead</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-field">
+          <div class="modal-label">Empresa</div>
+          <div class="modal-value" id="modal-empresa">—</div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Tier</div>
+          <div id="modal-tier-badge"></div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Municipio</div>
+          <div class="modal-value" id="modal-municipio">—</div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Sector</div>
+          <div class="modal-value" id="modal-sector">—</div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Teléfono</div>
+          <div class="modal-value" id="modal-tel">—</div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Email</div>
+          <div class="modal-value" id="modal-email">—</div>
+        </div>
+      </div>
+      <hr class="modal-divider">
+      <div class="modal-field">
+        <div class="modal-label">Estatus</div>
+        <select class="estatus-select" id="modal-estatus">
+          <option value="Nuevo">Nuevo</option>
+          <option value="Contactado">Contactado</option>
+          <option value="Calificado">Calificado</option>
+          <option value="Cliente">Cliente</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Vendedor asignado</div>
+        <input class="vendedor-input" id="modal-vendedor" placeholder="Nombre del vendedor...">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Notas</div>
+        <textarea class="notas-input" id="modal-notas" placeholder="Agregar notas sobre este prospecto..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://invwksntpqxsmkqycybf.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_MjgQ6mksY3klFMSzhu4QWg_ojA0rLQ7'
+const PAGE_SIZE = 100
+
+let allData = []
+let filtered = []
+let currentPage = 1
+let sortCol = 'id'
+let sortAsc = true
+let editingId = null
+
+const headers = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json'
+}
+
+async function fetchAll() {
+  let all = []
+  let from = 0
+  const batchSize = 1000
+  while (true) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/leads_menlun?select=id,nombre_establecimiento,razon_social,giro,sector,tier,municipio,estado,zona_menlun,estatus,vendedor_asignado,notas,telefono,email,facturacion_estimada&order=id.asc&offset=${from}&limit=${batchSize}`,
+      { headers }
+    )
+    const batch = await res.json()
+    if (!batch || batch.length === 0) break
+    all = all.concat(batch)
+    from += batchSize
+    if (batch.length < batchSize) break
+  }
+  return all
+}
+
+async function init() {
+  try {
+    allData = await fetchAll()
+    loadEstados()
+    updateMetrics(allData)
+    filtered = [...allData]
+    renderTable()
+    showToast(`${allData.length.toLocaleString()} leads cargados`)
+  } catch(e) {
+    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">Error cargando datos. Verifica la conexión.</td></tr>`
+  }
+}
+
+function loadEstados() {
+  const estados = [...new Set(allData.map(r => r.estado).filter(Boolean))].sort()
+  const sel = document.getElementById('f-estado')
+  estados.forEach(e => {
+    const opt = document.createElement('option')
+    opt.value = e; opt.textContent = e
+    sel.appendChild(opt)
+  })
+}
+
+function updateMetrics(data) {
+  const total = data.length
+  document.getElementById('m-total').textContent = total.toLocaleString()
+  document.getElementById('total-count').textContent = total.toLocaleString()
+  document.getElementById('m-platino').textContent = data.filter(r=>r.tier==='Platino').length.toLocaleString()
+  document.getElementById('m-oro').textContent = data.filter(r=>r.tier==='Oro').length.toLocaleString()
+  document.getElementById('m-plata').textContent = data.filter(r=>r.tier==='Plata').length.toLocaleString()
+  document.getElementById('m-bronce').textContent = data.filter(r=>r.tier==='Bronce').length.toLocaleString()
+  document.getElementById('z-centro').textContent = data.filter(r=>r.zona_menlun==='Centro').length.toLocaleString()
+  document.getElementById('z-norte').textContent = data.filter(r=>r.zona_menlun==='Norte').length.toLocaleString()
+  document.getElementById('z-bajio').textContent = data.filter(r=>r.zona_menlun==='Bajio').length.toLocaleString()
+  document.getElementById('z-sur').textContent = data.filter(r=>r.zona_menlun==='Sur').length.toLocaleString()
+  document.getElementById('z-sinzona').textContent = data.filter(r=>r.zona_menlun==='Sin zona'||!r.zona_menlun).length.toLocaleString()
+}
+
+function applyFilters() {
+  const search = document.getElementById('search').value.toLowerCase()
+  const tier = document.getElementById('f-tier').value
+  const sector = document.getElementById('f-sector').value
+  const zona = document.getElementById('f-zona').value
+  const estado = document.getElementById('f-estado').value
+  const estatus = document.getElementById('f-estatus').value
+
+  filtered = allData.filter(r => {
+    if (search && !((r.nombre_establecimiento||'').toLowerCase().includes(search) ||
+                    (r.razon_social||'').toLowerCase().includes(search) ||
+                    (r.municipio||'').toLowerCase().includes(search))) return false
+    if (tier && r.tier !== tier) return false
+    if (sector && r.sector !== sector) return false
+    if (zona && r.zona_menlun !== zona) return false
+    if (estado && r.estado !== estado) return false
+    if (estatus && r.estatus !== estatus) return false
+    return true
+  })
+
+  currentPage = 1
+  document.getElementById('results-count').textContent =
+    filtered.length !== allData.length ? `${filtered.length.toLocaleString()} resultados` : ''
+  renderTable()
+}
+
+function clearFilters() {
+  document.getElementById('search').value = ''
+  document.getElementById('f-tier').value = ''
+  document.getElementById('f-sector').value = ''
+  document.getElementById('f-zona').value = ''
+  document.getElementById('f-estado').value = ''
+  document.getElementById('f-estatus').value = ''
+  filtered = [...allData]
+  currentPage = 1
+  document.getElementById('results-count').textContent = ''
+  renderTable()
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc
+  else { sortCol = col; sortAsc = true }
+  filtered.sort((a, b) => {
+    const va = (a[col]||'').toString().toLowerCase()
+    const vb = (b[col]||'').toString().toLowerCase()
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va)
+  })
+  currentPage = 1
+  renderTable()
+}
+
+function tierBadge(t) {
+  const map = { 'Platino':'tier-platino','Oro':'tier-oro','Plata':'tier-plata','Bronce':'tier-bronce' }
+  const cls = map[t] || 'tier-sin'
+  const icon = t==='Platino'?'◆ ':t==='Oro'?'★ ':''
+  return `<span class="tier-badge ${cls}">${icon}${t||'—'}</span>`
+}
+
+function sectorBadge(s) {
+  const map = {'Alimentos':'s-alimentos','Bebidas':'s-bebidas','Farmaceutico':'s-farmaceutico','Hospitales':'s-hospitales','Hoteles':'s-hoteles','Institucional':'s-institucional'}
+  return `<span class="sector-badge ${map[s]||'s-otro'}">${s||'—'}</span>`
+}
+
+function estatusBadge(e) {
+  const map = {'Nuevo':'e-nuevo','Contactado':'e-contactado','Calificado':'e-calificado','Cliente':'e-cliente'}
+  return `<span class="estatus-badge ${map[e]||'e-nuevo'}">${e||'Nuevo'}</span>`
+}
+
+function renderTable() {
+  const start = (currentPage-1)*PAGE_SIZE
+  const page = filtered.slice(start, start+PAGE_SIZE)
+  const tbody = document.getElementById('table-body')
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados con los filtros actuales</p></div></td></tr>`
+    renderPagination()
+    return
+  }
+
+  tbody.innerHTML = page.map(r => `
+    <tr>
+      <td>
+        <div class="empresa-name">${r.nombre_establecimiento||r.razon_social||'—'}</div>
+        ${r.razon_social&&r.razon_social!==r.nombre_establecimiento?`<div class="giro-text">${r.razon_social}</div>`:''}
+      </td>
+      <td><div class="giro-text">${r.giro||'—'}</div></td>
+      <td>${sectorBadge(r.sector)}</td>
+      <td>${tierBadge(r.tier)}</td>
+      <td style="color:var(--gray-600)">${r.municipio||'—'}</td>
+      <td style="color:var(--gray-600)">${r.estado||'—'}</td>
+      <td style="color:var(--gray-400);font-size:12px">${r.zona_menlun||'—'}</td>
+      <td>${estatusBadge(r.estatus)}</td>
+      <td style="color:var(--gray-400);font-size:12px">${r.vendedor_asignado||'—'}</td>
+      <td>
+        <div class="row-actions">
+          <button class="row-btn" title="Editar" onclick="openModal(${r.id})">✏️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('')
+
+  renderPagination()
+
+  const total = filtered.length
+  const end = Math.min(start+PAGE_SIZE, total)
+  document.getElementById('page-info').textContent = `Mostrando ${(start+1).toLocaleString()}–${end.toLocaleString()} de ${total.toLocaleString()} leads`
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filtered.length/PAGE_SIZE)
+  const btns = document.getElementById('page-btns')
+  if (totalPages <= 1) { btns.innerHTML = ''; return }
+
+  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`
+  const range = []
+  for (let i=1;i<=totalPages;i++) {
+    if (i===1||i===totalPages||Math.abs(i-currentPage)<=2) range.push(i)
+    else if (range[range.length-1]!=='…') range.push('…')
+  }
+  range.forEach(p => {
+    if (p==='…') html += `<span style="padding:0 4px;color:var(--gray-400)">…</span>`
+    else html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`
+  })
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`
+  btns.innerHTML = html
+}
+
+function goPage(p) {
+  const totalPages = Math.ceil(filtered.length/PAGE_SIZE)
+  if (p<1||p>totalPages) return
+  currentPage = p
+  renderTable()
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+function openModal(id) {
+  const r = allData.find(x=>x.id===id)
+  if (!r) return
+  editingId = id
+  document.getElementById('modal-empresa').textContent = r.nombre_establecimiento||r.razon_social||'—'
+  document.getElementById('modal-tier-badge').innerHTML = tierBadge(r.tier)
+  document.getElementById('modal-municipio').textContent = `${r.municipio||'—'}, ${r.estado||''}`
+  document.getElementById('modal-sector').textContent = r.sector||'—'
+  document.getElementById('modal-tel').textContent = r.telefono||'—'
+  document.getElementById('modal-email').textContent = r.email||'—'
+  document.getElementById('modal-estatus').value = r.estatus||'Nuevo'
+  document.getElementById('modal-vendedor').value = r.vendedor_asignado||''
+  document.getElementById('modal-notas').value = r.notas||''
+  document.getElementById('modal').classList.add('open')
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open')
+  editingId = null
+}
+
+async function saveModal() {
+  if (!editingId) return
+  const estatus = document.getElementById('modal-estatus').value
+  const vendedor = document.getElementById('modal-vendedor').value
+  const notas = document.getElementById('modal-notas').value
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leads_menlun?id=eq.${editingId}`, {
+      method: 'PATCH',
+      headers: { ...headers, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ estatus, vendedor_asignado: vendedor, notas })
+    })
+    if (res.ok || res.status === 204) {
+      const idx = allData.findIndex(x=>x.id===editingId)
+      if (idx>=0) { allData[idx].estatus=estatus; allData[idx].vendedor_asignado=vendedor; allData[idx].notas=notas }
+      closeModal()
+      renderTable()
+      showToast('Lead actualizado ✓')
+    } else {
+      showToast('Error al guardar')
+    }
+  } catch(e) {
+    showToast('Error de conexión')
+  }
+}
+
+function exportCSV() {
+  const data = filtered
+  if (!data.length) { showToast('No hay datos para exportar'); return }
+  const cols = ['id','nombre_establecimiento','razon_social','giro','sector','tier','facturacion_estimada','municipio','estado','zona_menlun','telefono','email','estatus','vendedor_asignado','notas']
+  const header = cols.join(',')
+  const rows = data.map(r => cols.map(c => `"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(','))
+  const csv = [header,...rows].join('\n')
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'})
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href=url; a.download=`menlun_leads_${new Date().toISOString().slice(0,10)}.csv`
+  a.click(); URL.revokeObjectURL(url)
+  showToast(`${data.length.toLocaleString()} leads exportados`)
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'), 2800)
+}
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal()
+})
+
+init()
+</script>
+</body>
+</html>
