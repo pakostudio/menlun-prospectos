@@ -152,6 +152,25 @@ tr:hover .row-actions { opacity: 1; }
   transition: all 0.15s;
   font-family: 'DM Sans', sans-serif;
 }
+
+.pin-input {
+  width: 52px;
+  height: 56px;
+  border-radius: 10px;
+  border: 1.5px solid #CDD3DE;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  color: #0D1F3C;
+  font-family: 'DM Mono', monospace;
+  outline: none;
+  transition: all 0.15s;
+}
+.pin-input:focus {
+  border-color: #00AEEF;
+  box-shadow: 0 0 0 3px rgba(0,174,239,0.15);
+}
+
 .login-btn:hover {
   background: #0D1F3C;
   color: #fff;
@@ -201,18 +220,37 @@ tr:hover .row-actions { opacity: 1; }
 <!-- LOGIN SCREEN -->
 <div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#0D1F3C 0%,#1A3A6B 100%);z-index:1000;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:16px;padding:40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
-    <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px" onerror="this.style.display='none'">
-    <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
-    <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <button onclick="login('jose_carlos','José Carlos')" class="login-btn">José Carlos</button>
-      <button onclick="login('arturo','Arturo')" class="login-btn">Arturo</button>
-      <button onclick="login('daniel','Daniel')" class="login-btn">Daniel</button>
-      <button onclick="login('mary_tere','Mary Tere')" class="login-btn">Mary Tere</button>
-      <button onclick="login('jesus','Jesús')" class="login-btn">Jesús</button>
-      <button onclick="login('ulises','Ulises')" class="login-btn">Ulises</button>
-      <button onclick="login('invitado','Invitado')" class="login-btn" style="grid-column:1/-1;background:#F5F7FA;color:#7A8599;border-color:#CDD3DE">Invitado (solo lectura)</button>
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px;border-radius:6px;padding:4px;background:#fff">
+    
+    <!-- STEP 1: SELECT NAME -->
+    <div id="step-nombre">
+      <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
+      <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button onclick="selectNombre('jose_carlos','José Carlos')" class="login-btn">José Carlos</button>
+        <button onclick="selectNombre('arturo','Arturo')" class="login-btn">Arturo</button>
+        <button onclick="selectNombre('daniel','Daniel')" class="login-btn">Daniel</button>
+        <button onclick="selectNombre('mary_tere','Mary Tere')" class="login-btn">Mary Tere</button>
+        <button onclick="selectNombre('jesus','Jesús')" class="login-btn">Jesús</button>
+        <button onclick="selectNombre('ulises','Ulises')" class="login-btn">Ulises</button>
+        <button onclick="selectNombre('invitado','Invitado')" class="login-btn" style="grid-column:1/-1;background:#F5F7FA;color:#7A8599;border-color:#CDD3DE">Invitado</button>
+      </div>
     </div>
+
+    <!-- STEP 2: ENTER PIN -->
+    <div id="step-pin" style="display:none">
+      <div style="font-size:18px;font-weight:600;color:#0D1F3C;margin-bottom:6px" id="pin-title">Hola, José Carlos</div>
+      <div style="font-size:14px;color:#7A8599;margin-bottom:24px">Ingresa tu PIN de 4 dígitos</div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
+        <input type="password" maxlength="1" class="pin-input" id="pin1" oninput="pinNext(this,'pin2')" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-input" id="pin2" oninput="pinNext(this,'pin3')" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-input" id="pin3" oninput="pinNext(this,'pin4')" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-input" id="pin4" oninput="pinCheck()" inputmode="numeric">
+      </div>
+      <div id="pin-error" style="color:#D85A30;font-size:13px;min-height:20px;margin-bottom:12px"></div>
+      <button onclick="showStepNombre()" style="font-size:13px;color:#7A8599;background:none;border:none;cursor:pointer">← Cambiar nombre</button>
+    </div>
+
     <div style="margin-top:20px;font-size:12px;color:#B0BED0">PMPS · Operadora Química Menlun</div>
   </div>
 </div>
@@ -220,10 +258,7 @@ tr:hover .row-actions { opacity: 1; }
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <img src="PMPS_logotipo.png" alt="PMPS" style="height:38px;width:auto;display:block;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'">
-    <div id="logo-fallback" style="display:none;align-items:center;gap:8px">
-      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
-    </div>
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:38px;width:auto;display:block;border-radius:4px;padding:2px;background:#fff">
     <div style="width:1px;height:28px;background:var(--border);margin:0 8px"></div>
     <div>
       <div class="logo-text">Sistema de <span>Prospectos</span></div>
@@ -485,6 +520,52 @@ async function fetchAll() {
     if (batch.length < batchSize) break
   }
   return all
+}
+
+const PINS = {
+  'jose_carlos': '1234',
+  'arturo':      '2345',
+  'daniel':      '3456',
+  'mary_tere':   '4567',
+  'jesus':       '5678',
+  'ulises':      '6789',
+  'invitado':    '0000',
+}
+
+let pendingUser = null
+
+function selectNombre(id, nombre) {
+  pendingUser = { id, nombre }
+  document.getElementById('step-nombre').style.display = 'none'
+  document.getElementById('step-pin').style.display = 'block'
+  document.getElementById('pin-title').textContent = `Hola, ${nombre}`
+  document.getElementById('pin-error').textContent = ''
+  ;['pin1','pin2','pin3','pin4'].forEach(id => document.getElementById(id).value = '')
+  setTimeout(() => document.getElementById('pin1').focus(), 100)
+}
+
+function showStepNombre() {
+  document.getElementById('step-pin').style.display = 'none'
+  document.getElementById('step-nombre').style.display = 'block'
+  pendingUser = null
+}
+
+function pinNext(el, nextId) {
+  el.value = el.value.replace(/[^0-9]/g,'')
+  if (el.value.length === 1) document.getElementById(nextId)?.focus()
+}
+
+function pinCheck() {
+  const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('')
+  if (pin.length < 4) return
+  const correct = PINS[pendingUser?.id]
+  if (pin === correct) {
+    login(pendingUser.id, pendingUser.nombre)
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorrecto. Intenta de nuevo.'
+    ;['pin1','pin2','pin3','pin4'].forEach(id => document.getElementById(id).value = '')
+    setTimeout(() => document.getElementById('pin1').focus(), 100)
+  }
 }
 
 function login(id, nombre) {
