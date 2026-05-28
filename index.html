@@ -140,6 +140,24 @@ tr:hover .row-actions { opacity: 1; }
 .vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: var(--green); background: var(--white); }
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
 .modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.login-btn {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #E0EBF5;
+  background: #F5F7FA;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0D1F3C;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.login-btn:hover {
+  background: #0D1F3C;
+  color: #fff;
+  border-color: #0D1F3C;
+}
+
 .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* PAGINATION */
@@ -186,14 +204,14 @@ tr:hover .row-actions { opacity: 1; }
     <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px" onerror="this.style.display='none'">
     <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
     <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
-    <div class="grid-login" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      ${VENDEDORES.map(v => `
-        <button onclick="login('${v.id}','${v.nombre}')" style="padding:12px;border-radius:10px;border:1.5px solid #E0EBF5;background:#F5F7FA;font-size:14px;font-weight:500;color:#0D1F3C;cursor:pointer;transition:all 0.15s;font-family:inherit"
-          onmouseover="this.style.background='#0D1F3C';this.style.color='#fff';this.style.borderColor='#0D1F3C'"
-          onmouseout="this.style.background='#F5F7FA';this.style.color='#0D1F3C';this.style.borderColor='#E0EBF5'">
-          ${v.nombre}
-        </button>
-      `).join('')}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button onclick="login('jose_carlos','José Carlos')" class="login-btn">José Carlos</button>
+      <button onclick="login('arturo','Arturo')" class="login-btn">Arturo</button>
+      <button onclick="login('daniel','Daniel')" class="login-btn">Daniel</button>
+      <button onclick="login('mary_tere','Mary Tere')" class="login-btn">Mary Tere</button>
+      <button onclick="login('jesus','Jesús')" class="login-btn">Jesús</button>
+      <button onclick="login('ulises','Ulises')" class="login-btn">Ulises</button>
+      <button onclick="login('invitado','Invitado')" class="login-btn" style="grid-column:1/-1;background:#F5F7FA;color:#7A8599;border-color:#CDD3DE">Invitado (solo lectura)</button>
     </div>
     <div style="margin-top:20px;font-size:12px;color:#B0BED0">PMPS · Operadora Química Menlun</div>
   </div>
@@ -471,7 +489,6 @@ async function fetchAll() {
 
 function login(id, nombre) {
   currentUser = { id, nombre }
-  localStorage.setItem('pmps_user', JSON.stringify(currentUser))
   document.getElementById('login-screen').style.display = 'none'
   const initials = nombre.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()
   document.getElementById('user-avatar').textContent = initials
@@ -482,7 +499,6 @@ function login(id, nombre) {
 function logout() {
   if (!confirm('¿Cerrar sesión?')) return
   currentUser = null
-  localStorage.removeItem('pmps_user')
   location.reload()
 }
 
@@ -840,20 +856,8 @@ document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
 })
 
-// Check saved session
-const savedUser = localStorage.getItem('pmps_user')
-if (savedUser) {
-  try {
-    const u = JSON.parse(savedUser)
-    login(u.id, u.nombre)
-  } catch(e) {
-    document.getElementById('login-screen').style.display = 'flex'
-  }
-} else {
-  // Render login buttons dynamically
-  const grid = document.querySelector('#login-screen .grid-login')
-  document.getElementById('login-screen').style.display = 'flex'
-}
+// Always show login screen on load
+document.getElementById('login-screen').style.display = 'flex'
 </script>
 </body>
 </html>
