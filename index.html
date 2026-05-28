@@ -7,30 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #0D1F3C;
-  --green-light: #E8EEF5;
-  --green-dark: #071629;
-  --amber: #00AEEF;
-  --amber-light: #E0F6FF;
-  --blue: #00AEEF;
-  --blue-light: #E0F6FF;
-  --coral: #1A6BAF;
-  --coral-light: #D6E9F8;
-  --gray-50: #F5F7FA;
-  --gray-100: #EDF0F5;
-  --gray-200: #CDD3DE;
-  --gray-400: #7A8599;
-  --gray-600: #4A5568;
-  --gray-800: #0D1F3C;
+  --green: #1D9E75;
+  --green-light: #E1F5EE;
+  --green-dark: #085041;
+  --amber: #EF9F27;
+  --amber-light: #FAEEDA;
+  --blue: #378ADD;
+  --blue-light: #E6F1FB;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --gray-50: #F8F8F6;
+  --gray-100: #F1EFE8;
+  --gray-200: #D3D1C7;
+  --gray-400: #888780;
+  --gray-600: #5F5E5A;
+  --gray-800: #2C2C2A;
   --white: #FFFFFF;
-  --border: rgba(13,31,60,0.10);
-  --shadow: 0 1px 3px rgba(13,31,60,0.08);
-  --shadow-md: 0 4px 16px rgba(13,31,60,0.12);
+  --border: rgba(0,0,0,0.08);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
   --radius: 10px;
   --radius-sm: 6px;
   --radius-pill: 20px;
-  --navy: #0D1F3C;
-  --sky: #00AEEF;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 14px; min-height: 100vh; }
@@ -38,7 +36,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 /* TOPBAR */
 .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
 .topbar-left { display: flex; align-items: center; gap: 12px; }
-.logo-mark { width: 32px; height: 32px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-mark { width: 32px; height: 32px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
 .logo-mark svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; }
 .logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
 .logo-text span { color: var(--green); }
@@ -47,8 +45,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .total-pill b { color: var(--gray-800); font-weight: 600; }
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-700); font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: var(--gray-50); }
-.btn-primary { background: var(--navy); border-color: var(--navy); color: #fff; }
-.btn-primary:hover { background: var(--sky); border-color: var(--sky); color: #fff; }
+.btn-primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
 
 /* METRICS */
 .metrics-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
@@ -57,23 +55,23 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .metric-val { font-size: 24px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
 .metric-sub { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
 .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.dot-total { background: var(--navy); }
-.dot-platino { background: var(--navy); }
-.dot-oro { background: var(--sky); }
-.dot-plata { background: #7A9CBF; }
-.dot-bronce { background: #B0BED0; }
+.dot-total { background: var(--green); }
+.dot-platino { background: var(--blue); }
+.dot-oro { background: var(--amber); }
+.dot-plata { background: var(--gray-400); }
+.dot-bronce { background: var(--coral); }
 
 /* FILTERS */
 .filters-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
 .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--gray-400); fill: none; stroke-width: 2; pointer-events: none; }
 .search-input { width: 100%; padding: 7px 10px 7px 32px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); transition: all 0.15s; }
-.search-input:focus { outline: none; border-color: var(--sky); background: var(--white); }
+.search-input:focus { outline: none; border-color: var(--green); background: var(--white); }
 .filter-select { padding: 7px 28px 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; transition: all 0.15s; }
-.filter-select:focus { outline: none; border-color: var(--sky); background-color: var(--white); }
+.filter-select:focus { outline: none; border-color: var(--green); background-color: var(--white); }
 .active-filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--sky); color: #fff; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
-.filter-tag button { background: none; border: none; cursor: pointer; color: #fff; font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
+.filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-light); color: var(--green-dark); padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
+.filter-tag button { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
 .results-count { font-size: 12px; color: var(--gray-400); margin-left: auto; white-space: nowrap; }
 
 /* LAYOUT */
@@ -90,37 +88,38 @@ th:hover { color: var(--gray-600); }
 th .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; }
 td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #F0F6FB; }
+tr:hover td { background: #F9FBF9; }
 .empresa-name { font-weight: 500; font-size: 13px; color: var(--gray-800); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .giro-text { font-size: 12px; color: var(--gray-400); max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* BADGES */
 .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; white-space: nowrap; }
-.tier-platino { background: var(--navy); color: #fff; }
-.tier-oro { background: var(--sky); color: #fff; }
-.tier-plata { background: #E0EBF5; color: var(--navy); }
-.tier-bronce { background: var(--gray-100); color: var(--gray-400); }
+.tier-platino { background: var(--blue-light); color: #0C447C; }
+.tier-oro { background: var(--amber-light); color: #633806; }
+.tier-plata { background: var(--gray-100); color: var(--gray-600); }
+.tier-bronce { background: var(--coral-light); color: #4A1B0C; }
 .tier-sin { background: var(--gray-100); color: var(--gray-600); }
 .sector-badge { display: inline-block; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 500; }
-.s-alimentos { background: #E0F6FF; color: #004F7C; }
-.s-bebidas { background: #E8EEF5; color: var(--navy); }
-.s-farmaceutico { background: #F0F4FF; color: #1A3080; }
-.s-hospitales { background: #E0EBF5; color: var(--navy); }
-.s-hoteles { background: #E0F6FF; color: #0069A0; }
-.s-institucional { background: #EEF3F8; color: var(--navy); }
+.s-alimentos { background: #EAF3DE; color: #27500A; }
+.s-bebidas { background: #E6F1FB; color: #0C447C; }
+.s-farmaceutico { background: #EEEDFE; color: #26215C; }
+.s-hospitales { background: #FAECE7; color: #4A1B0C; }
+.s-hoteles { background: #FAEEDA; color: #633806; }
+.s-institucional { background: #FBEAF0; color: #4B1528; }
 .s-otro { background: var(--gray-100); color: var(--gray-600); }
 .estatus-badge { display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
 .estatus-badge:hover { opacity: 0.8; }
-.e-nuevo { background: #E0F6FF; color: #004F7C; }
-.e-contactado { background: #E8EEF5; color: var(--navy); }
-.e-calificado { background: var(--navy); color: #fff; }
-.e-cliente { background: var(--sky); color: #fff; }
+.e-nuevo { background: #EAF3DE; color: #27500A; }
+.e-contactado { background: var(--blue-light); color: #0C447C; }
+.e-calificado { background: var(--amber-light); color: #633806; }
+.e-cliente { background: var(--green-light); color: var(--green-dark); }
 
 /* ROW ACTIONS */
 .row-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
 tr:hover .row-actions { opacity: 1; }
 .row-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--gray-400); font-size: 13px; transition: all 0.15s; }
 .row-btn:hover { background: var(--gray-50); color: var(--gray-800); border-color: var(--gray-200); }
+.row-btn.maps:hover { color: #0D1F3C; background: #E0F6FF; border-color: #00AEEF; }
 
 /* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
@@ -138,7 +137,7 @@ tr:hover .row-actions { opacity: 1; }
 .estatus-select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
 .vendedor-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
 .notas-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 80px; resize: vertical; }
-.vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: var(--sky); background: var(--white); }
+.vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: var(--green); background: var(--white); }
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
 .modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -149,7 +148,7 @@ tr:hover .row-actions { opacity: 1; }
 .page-btns { display: flex; gap: 4px; }
 .page-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-600); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; transition: all 0.15s; }
 .page-btn:hover { background: var(--gray-50); border-color: var(--gray-200); }
-.page-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; font-weight: 600; }
+.page-btn.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* TOAST */
@@ -184,10 +183,11 @@ tr:hover .row-actions { opacity: 1; }
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <img src="https://pakostudio.github.io/menlun-prospectos/PMPS_logotipo.png" alt="PMPS" style="height:36px;width:auto;filter:brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(185deg);display:block;">
-    <div style="width:1px;height:28px;background:var(--border);margin:0 4px"></div>
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+    </div>
     <div>
-      <div class="logo-text" style="color:var(--navy)">Sistema de <span style="color:var(--sky)">Prospectos</span></div>
+      <div class="logo-text">MEN<span>LUN</span> Leads</div>
     </div>
   </div>
   <div class="topbar-right">
@@ -208,12 +208,12 @@ tr:hover .row-actions { opacity: 1; }
   </div>
   <div class="metric">
     <div class="metric-label"><span class="dot dot-platino"></span> Platino</div>
-    <div class="metric-val" id="m-platino" style="color:var(--navy)">—</div>
+    <div class="metric-val" id="m-platino" style="color:var(--blue)">—</div>
     <div class="metric-sub">+$2,000,000</div>
   </div>
   <div class="metric">
     <div class="metric-label"><span class="dot dot-oro"></span> Oro</div>
-    <div class="metric-val" id="m-oro" style="color:var(--sky)">—</div>
+    <div class="metric-val" id="m-oro" style="color:var(--amber)">—</div>
     <div class="metric-sub">$200K – $1M</div>
   </div>
   <div class="metric">
@@ -223,17 +223,17 @@ tr:hover .row-actions { opacity: 1; }
   </div>
   <div class="metric">
     <div class="metric-label"><span class="dot dot-bronce"></span> Bronce</div>
-    <div class="metric-val" id="m-bronce" style="color:#4A90C4">—</div>
+    <div class="metric-val" id="m-bronce" style="color:var(--coral)">—</div>
     <div class="metric-sub">–$200,000</div>
   </div>
 </div>
 
 <!-- ZONA BARS -->
 <div class="zona-row">
-  <div class="zona-item"><div class="zona-dot" style="background:var(--navy)"></div><span class="zona-label">Centro</span><span class="zona-count" id="z-centro">—</span></div>
-  <div class="zona-item"><div class="zona-dot" style="background:var(--sky)"></div><span class="zona-label">Norte</span><span class="zona-count" id="z-norte">—</span></div>
-  <div class="zona-item"><div class="zona-dot" style="background:#1A6BAF"></div><span class="zona-label">Bajío</span><span class="zona-count" id="z-bajio">—</span></div>
-  <div class="zona-item"><div class="zona-dot" style="background:#4A90C4"></div><span class="zona-label">Sur</span><span class="zona-count" id="z-sur">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--green)"></div><span class="zona-label">Centro</span><span class="zona-count" id="z-centro">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--blue)"></div><span class="zona-label">Norte</span><span class="zona-count" id="z-norte">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--amber)"></div><span class="zona-label">Bajío</span><span class="zona-count" id="z-bajio">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:var(--coral)"></div><span class="zona-label">Sur</span><span class="zona-count" id="z-sur">—</span></div>
   <div class="zona-item"><div class="zona-dot" style="background:var(--gray-200)"></div><span class="zona-label">Sin zona</span><span class="zona-count" id="z-sinzona">—</span></div>
 </div>
 
@@ -354,12 +354,13 @@ tr:hover .row-actions { opacity: 1; }
       <hr class="modal-divider">
       <div class="modal-field">
         <div class="modal-label">Estatus</div>
-        <select class="estatus-select" id="modal-estatus">
-          <option value="Nuevo">Nuevo</option>
-          <option value="Contactado">Contactado</option>
-          <option value="Calificado">Calificado</option>
-          <option value="Cliente">Cliente</option>
-        </select>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="estatus-btns">
+          <button onclick="setEstatus('Nuevo')" class="estatus-opt" data-val="Nuevo" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--gray-50);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s">Nuevo</button>
+          <button onclick="setEstatus('Contactado')" class="estatus-opt" data-val="Contactado" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--gray-50);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s">Contactado</button>
+          <button onclick="setEstatus('Calificado')" class="estatus-opt" data-val="Calificado" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--gray-50);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s">Calificado</button>
+          <button onclick="setEstatus('Cliente')" class="estatus-opt" data-val="Cliente" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--gray-50);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s">Cliente</button>
+        </div>
+        <input type="hidden" id="modal-estatus" value="Nuevo">
       </div>
       <div class="modal-field">
         <div class="modal-label">Vendedor asignado</div>
@@ -370,8 +371,21 @@ tr:hover .row-actions { opacity: 1; }
         <textarea class="notas-input" id="modal-notas" placeholder="Agregar notas sobre este prospecto..."></textarea>
       </div>
     </div>
+    <div id="vibe-section" style="padding:0 24px 16px;display:none">
+      <div style="background:var(--gray-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:500;color:var(--navy)">Contactos encontrados</div>
+          <div id="vibe-status" style="font-size:12px;color:var(--gray-400)"></div>
+        </div>
+        <div id="vibe-results"></div>
+      </div>
+    </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="buscarContactoVibe()" id="btn-vibe" style="border-color:#00AEEF;color:#0D1F3C">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Buscar contacto
+      </button>
       <button class="btn btn-primary" onclick="saveModal()">Guardar cambios</button>
     </div>
   </div>
@@ -416,7 +430,89 @@ async function fetchAll() {
   return all
 }
 
-async function init() {
+async function function openMaps(id) {
+  const r = allData.find(x=>x.id===id)
+  if (!r) return
+  const nombre = encodeURIComponent((r.nombre_establecimiento||r.razon_social||'').replace(/['"]/g,''))
+  const municipio = encodeURIComponent(r.municipio||'')
+  const estado = encodeURIComponent(r.estado||'')
+  const query = `${nombre} ${municipio} ${estado}`
+  window.open(`https://www.google.com/maps/search/${query}`, '_blank')
+}
+
+function setEstatus(val) {
+  document.getElementById('modal-estatus').value = val
+  document.querySelectorAll('.estatus-opt').forEach(btn => {
+    const isActive = btn.dataset.val === val
+    if (isActive) {
+      btn.style.background = val==='Nuevo'?'#E0F6FF':val==='Contactado'?'#E8EEF5':val==='Calificado'?'#0D1F3C':'#00AEEF'
+      btn.style.color = val==='Calificado'||val==='Cliente'?'#fff':val==='Nuevo'?'#004F7C':'#0D1F3C'
+      btn.style.borderColor = val==='Nuevo'?'#00AEEF':val==='Contactado'?'#0D1F3C':val==='Calificado'?'#0D1F3C':'#00AEEF'
+      btn.style.fontWeight = '600'
+    } else {
+      btn.style.background = 'var(--gray-50)'
+      btn.style.color = 'var(--gray-600)'
+      btn.style.borderColor = 'var(--border)'
+      btn.style.fontWeight = '400'
+    }
+  })
+}
+
+async function buscarContactoVibe() {
+  const empresa = document.getElementById('modal-empresa').textContent
+  const municipio = document.getElementById('modal-municipio').textContent
+  if (!empresa || empresa === '—') return
+
+  const btn = document.getElementById('btn-vibe')
+  btn.textContent = 'Buscando...'
+  btn.disabled = true
+
+  document.getElementById('vibe-section').style.display = 'block'
+  document.getElementById('vibe-status').textContent = 'Consultando base de datos...'
+  document.getElementById('vibe-results').innerHTML = '<div style="text-align:center;padding:16px;color:var(--gray-400);font-size:13px">⏳ Buscando contactos...</div>'
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'Eres un asistente que busca información de contacto de empresas mexicanas. Responde SOLO en JSON con este formato exacto: {"encontrado": true/false, "contactos": [{"nombre": "...", "cargo": "...", "email": "...", "telefono": "..."}], "mensaje": "..."}. Si no tienes datos reales, pon encontrado:false.',
+        messages: [{ role: 'user', content: `Busca el contacto de decisión (director de compras, gerente de operaciones o similar) de la empresa: "${empresa}" ubicada en ${municipio}. Responde solo JSON.` }]
+      })
+    })
+    const data = await res.json()
+    const text = data.content?.[0]?.text || '{}'
+    let result
+    try { result = JSON.parse(text.replace(/```json|```/g,'').trim()) }
+    catch(e) { result = {encontrado: false, mensaje: 'Sin datos disponibles'} }
+
+    if (result.encontrado && result.contactos?.length > 0) {
+      document.getElementById('vibe-status').textContent = `${result.contactos.length} contacto(s) encontrado(s)`
+      document.getElementById('vibe-results').innerHTML = result.contactos.map(c => `
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="font-weight:500;font-size:13px;color:var(--navy)">${c.nombre||'—'}</div>
+          <div style="font-size:12px;color:var(--gray-400);margin:2px 0">${c.cargo||'—'}</div>
+          <div style="display:flex;gap:12px;margin-top:6px">
+            ${c.email?`<a href="mailto:${c.email}" style="font-size:12px;color:#00AEEF;text-decoration:none">✉ ${c.email}</a>`:''}
+            ${c.telefono?`<a href="tel:${c.telefono}" style="font-size:12px;color:#00AEEF;text-decoration:none">📞 ${c.telefono}</a>`:''}
+          </div>
+        </div>
+      `).join('')
+    } else {
+      document.getElementById('vibe-status').textContent = ''
+      document.getElementById('vibe-results').innerHTML = `<div style="font-size:13px;color:var(--gray-400);padding:8px 0">${result.mensaje||'No se encontraron contactos para esta empresa.'}</div>`
+    }
+  } catch(e) {
+    document.getElementById('vibe-results').innerHTML = '<div style="font-size:13px;color:var(--coral)">Error al buscar contactos. Intenta de nuevo.</div>'
+  }
+
+  btn.textContent = 'Buscar contacto'
+  btn.disabled = false
+}
+
+init() {
   try {
     allData = await fetchAll()
     loadEstados()
@@ -528,7 +624,7 @@ function renderTable() {
   const tbody = document.getElementById('table-body')
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados con los filtros actuales</p></div></td></tr>`
+    tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados con los filtros actuales</p></div></td></tr>`
     renderPagination()
     return
   }
@@ -549,6 +645,9 @@ function renderTable() {
       <td style="color:var(--gray-400);font-size:12px">${r.vendedor_asignado||'—'}</td>
       <td>
         <div class="row-actions">
+          <button class="row-btn" title="Ver en Google Maps" onclick="openMaps(${r.id})" style="color:#1A6BAF">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </button>
           <button class="row-btn" title="Editar" onclick="openModal(${r.id})">✏️</button>
         </div>
       </td>
@@ -599,9 +698,14 @@ function openModal(id) {
   document.getElementById('modal-sector').textContent = r.sector||'—'
   document.getElementById('modal-tel').textContent = r.telefono||'—'
   document.getElementById('modal-email').textContent = r.email||'—'
-  document.getElementById('modal-estatus').value = r.estatus||'Nuevo'
+  const estatusVal = r.estatus||'Nuevo'
+  document.getElementById('modal-estatus').value = estatusVal
+  setEstatus(estatusVal)
   document.getElementById('modal-vendedor').value = r.vendedor_asignado||''
   document.getElementById('modal-notas').value = r.notas||''
+  document.getElementById('vibe-section').style.display = 'none'
+  document.getElementById('vibe-results').innerHTML = ''
+  document.getElementById('vibe-status').textContent = ''
   document.getElementById('modal').classList.add('open')
 }
 
@@ -612,7 +716,7 @@ function closeModal() {
 
 async function saveModal() {
   if (!editingId) return
-  const estatus = document.getElementById('modal-estatus').value
+  const estatus = document.getElementById('modal-estatus').value || 'Nuevo'
   const vendedor = document.getElementById('modal-vendedor').value
   const notas = document.getElementById('modal-notas').value
 
