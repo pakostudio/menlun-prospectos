@@ -69,16 +69,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .search-input:focus { outline: none; border-color: #0D1F3C; background: var(--white); }
 .filter-select { padding: 7px 28px 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; transition: all 0.15s; }
 .filter-select:focus { outline: none; border-color: #0D1F3C; background-color: var(--white); }
-.active-filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-light); color: var(--green-dark); padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
-.filter-tag button { background: none; border: none; cursor: pointer; color: #0D1F3C; font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
 .results-count { font-size: 12px; color: var(--gray-400); margin-left: auto; white-space: nowrap; }
 
 /* LAYOUT */
 .app-body { display: flex; min-height: calc(100vh - 56px - 80px - 48px); }
 
 /* TABLE */
-.table-section { flex: 1; padding: 20px 24px; overflow: hidden; }
+.table-section { flex: 1; padding: 20px 24px; overflow: hidden; min-width: 0; }
 .table-wrap { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); }
 .table-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .table-header-title { font-size: 13px; font-weight: 500; color: var(--gray-600); }
@@ -114,8 +111,8 @@ tr:hover td { background: #F9FBF9; }
 .e-calificado { background: var(--amber-light); color: #633806; }
 .e-cliente { background: var(--green-light); color: var(--green-dark); }
 
-/* ROW ACTIONS */
-.row-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+/* ROW ACTIONS — siempre visibles, intensifican en hover */
+.row-actions { display: flex; gap: 4px; opacity: 0.5; transition: opacity 0.15s; }
 tr:hover .row-actions { opacity: 1; }
 .row-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--gray-400); font-size: 13px; transition: all 0.15s; }
 .row-btn:hover { background: var(--gray-50); color: var(--gray-800); border-color: var(--gray-200); }
@@ -140,44 +137,11 @@ tr:hover .row-actions { opacity: 1; }
 .vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: #0D1F3C; background: var(--white); }
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
 .modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-.login-btn {
-  padding: 12px;
-  border-radius: 10px;
-  border: 1.5px solid #E0EBF5;
-  background: #F5F7FA;
-  font-size: 14px;
-  font-weight: 500;
-  color: #0D1F3C;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.pin-input {
-  width: 52px;
-  height: 56px;
-  border-radius: 10px;
-  border: 1.5px solid #CDD3DE;
-  font-size: 22px;
-  font-weight: 600;
-  text-align: center;
-  color: #0D1F3C;
-  font-family: 'DM Mono', monospace;
-  outline: none;
-  transition: all 0.15s;
-}
-.pin-input:focus {
-  border-color: #00AEEF;
-  box-shadow: 0 0 0 3px rgba(0,174,239,0.15);
-}
-
-.login-btn:hover {
-  background: #0D1F3C;
-  color: #fff;
-  border-color: #0D1F3C;
-}
-
 .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.login-btn { padding: 12px; border-radius: 10px; border: 1.5px solid #E0EBF5; background: #F5F7FA; font-size: 14px; font-weight: 500; color: #0D1F3C; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+.login-btn:hover { background: #0D1F3C; color: #fff; border-color: #0D1F3C; }
+.pin-input { width: 52px; height: 56px; border-radius: 10px; border: 1.5px solid #CDD3DE; font-size: 22px; font-weight: 600; text-align: center; color: #0D1F3C; font-family: 'DM Mono', monospace; outline: none; transition: all 0.15s; }
+.pin-input:focus { border-color: #00AEEF; box-shadow: 0 0 0 3px rgba(0,174,239,0.15); }
 
 /* PAGINATION */
 .pagination { background: var(--white); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
@@ -209,9 +173,60 @@ tr:hover .row-actions { opacity: 1; }
 .empty-state svg { width: 48px; height: 48px; stroke: var(--gray-200); fill: none; stroke-width: 1.5; margin-bottom: 12px; }
 .empty-state p { font-size: 14px; }
 
+/* MARKET PANEL */
+.market-panel { width: 300px; min-width: 300px; background: var(--white); border-left: 1px solid var(--border); display: none; flex-direction: column; overflow-y: auto; }
+.panel-hdr { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 1; }
+.panel-title { font-size: 13px; font-weight: 600; color: var(--gray-800); display: flex; align-items: center; gap: 8px; }
+.panel-title svg { width: 14px; height: 14px; stroke: var(--gray-400); fill: none; stroke-width: 2; }
+.estado-chip { background: #0D1F3C; color: #fff; border-radius: 5px; padding: 2px 9px; font-size: 11px; font-weight: 500; }
+.panel-body { padding: 14px 16px; }
+.panel-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 14px; }
+.pm-card { background: var(--gray-50); border-radius: var(--radius-sm); padding: 10px 11px; }
+.pm-label { font-size: 10px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+.pm-val { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--gray-800); letter-spacing: -0.5px; }
+.pm-sub { font-size: 10px; color: var(--gray-400); margin-top: 2px; }
+.panel-section-lbl { font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.panel-divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+.p-sector-row { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+.p-sector-name { font-size: 11px; color: var(--gray-800); width: 78px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-sector-bar-wrap { flex: 1; height: 5px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.p-sector-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+.p-sector-count { font-size: 10px; color: var(--gray-400); width: 20px; text-align: right; flex-shrink: 0; }
+.p-dyn-tag { font-size: 9px; font-weight: 500; padding: 1px 6px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
+.dyn-muyalta { background: var(--blue-light); color: #0C447C; }
+.dyn-alta { background: var(--green-light); color: var(--green-dark); }
+.dyn-media { background: var(--amber-light); color: #633806; }
+.dyn-select { background: var(--gray-100); color: var(--gray-600); }
+.pipeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.pipe-item { text-align: center; }
+.pipe-dot { width: 6px; height: 6px; border-radius: 50%; margin: 0 auto 4px; }
+.pd-nuevo { background: #639922; }
+.pd-contactado { background: var(--blue); }
+.pd-calificado { background: var(--amber); }
+.pd-cliente { background: var(--green); }
+.pipe-num { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+.pipe-lbl { font-size: 9px; color: var(--gray-400); margin-top: 1px; }
+.insight-list { display: flex; flex-direction: column; gap: 8px; }
+.insight-item { display: flex; gap: 8px; align-items: flex-start; }
+.insight-icon { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.insight-icon svg { width: 11px; height: 11px; fill: none; stroke-width: 2; }
+.ii-blue { background: var(--blue-light); }
+.ii-blue svg { stroke: #0C447C; }
+.ii-amber { background: var(--amber-light); }
+.ii-amber svg { stroke: #633806; }
+.ii-green { background: var(--green-light); }
+.ii-green svg { stroke: var(--green-dark); }
+.insight-text { font-size: 11px; color: var(--gray-600); line-height: 1.55; }
+.insight-text b { color: var(--gray-800); font-weight: 600; }
+.opp-highlight { background: #0D1F3C; border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px; }
+.opp-label { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+.opp-val { font-size: 22px; font-weight: 600; color: #fff; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
+.opp-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
 @media (max-width: 768px) {
   .metrics-bar { grid-template-columns: repeat(2, 1fr); }
   .zona-row { display: none; }
+  .market-panel { display: none !important; }
 }
 </style>
 </head>
@@ -221,8 +236,6 @@ tr:hover .row-actions { opacity: 1; }
 <div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#0D1F3C 0%,#1A3A6B 100%);z-index:1000;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:16px;padding:40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
     <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px">
-    
-    <!-- STEP 1: SELECT NAME -->
     <div id="step-nombre">
       <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
       <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
@@ -236,10 +249,8 @@ tr:hover .row-actions { opacity: 1; }
         <button onclick="selectNombre('invitado','Invitado')" class="login-btn" style="grid-column:1/-1;background:#F5F7FA;color:#7A8599;border-color:#CDD3DE">Invitado</button>
       </div>
     </div>
-
-    <!-- STEP 2: ENTER PIN -->
     <div id="step-pin" style="display:none">
-      <div style="font-size:18px;font-weight:600;color:#0D1F3C;margin-bottom:6px" id="pin-title">Hola, José Carlos</div>
+      <div style="font-size:18px;font-weight:600;color:#0D1F3C;margin-bottom:6px" id="pin-title">Hola</div>
       <div style="font-size:14px;color:#7A8599;margin-bottom:24px">Ingresa tu PIN de 4 dígitos</div>
       <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
         <input type="password" maxlength="1" class="pin-input" id="pin1" oninput="pinNext(this,'pin2')" inputmode="numeric">
@@ -250,7 +261,6 @@ tr:hover .row-actions { opacity: 1; }
       <div id="pin-error" style="color:#D85A30;font-size:13px;min-height:20px;margin-bottom:12px"></div>
       <button onclick="showStepNombre()" style="font-size:13px;color:#7A8599;background:none;border:none;cursor:pointer">← Cambiar nombre</button>
     </div>
-
     <div style="margin-top:20px;font-size:12px;color:#B0BED0">PMPS · Operadora Química Menlun</div>
   </div>
 </div>
@@ -363,7 +373,7 @@ tr:hover .row-actions { opacity: 1; }
   <span class="results-count" id="results-count"></span>
 </div>
 
-<!-- TABLE -->
+<!-- APP BODY -->
 <div class="app-body">
   <div class="table-section">
     <div class="table-wrap">
@@ -386,6 +396,67 @@ tr:hover .row-actions { opacity: 1; }
           <tr class="loading-row"><td colspan="10"><span class="spinner"></span>Cargando prospectos...</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- PANEL MERCADO -->
+  <div class="market-panel" id="market-panel">
+    <div class="panel-hdr">
+      <div class="panel-title">
+        <svg viewBox="0 0 24 24"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+        Mercado &nbsp;<span class="estado-chip" id="panel-estado-name">—</span>
+      </div>
+      <span style="font-size:10px;color:var(--gray-400);">2026</span>
+    </div>
+    <div class="panel-body">
+
+      <div class="opp-highlight">
+        <div class="opp-label">Oportunidad estimada</div>
+        <div class="opp-val" id="panel-opp">—</div>
+        <div class="opp-sub">MXN · basado en tiers</div>
+      </div>
+
+      <div class="panel-metrics">
+        <div class="pm-card">
+          <div class="pm-label">Prospectos</div>
+          <div class="pm-val" id="panel-total">—</div>
+          <div class="pm-sub">en este estado</div>
+        </div>
+        <div class="pm-card">
+          <div class="pm-label">Platino</div>
+          <div class="pm-val" id="panel-platino" style="color:var(--blue)">—</div>
+          <div class="pm-sub">alta prioridad</div>
+        </div>
+        <div class="pm-card">
+          <div class="pm-label">Oro</div>
+          <div class="pm-val" id="panel-oro" style="color:var(--amber)">—</div>
+          <div class="pm-sub">potencial alto</div>
+        </div>
+        <div class="pm-card">
+          <div class="pm-label">Clientes</div>
+          <div class="pm-val" id="panel-clientes" style="color:var(--green)">—</div>
+          <div class="pm-sub">activos</div>
+        </div>
+      </div>
+
+      <div class="panel-section-lbl">Sectores · dinamismo 2026</div>
+      <div id="panel-sectors"></div>
+
+      <div class="panel-divider"></div>
+
+      <div class="panel-section-lbl">Pipeline</div>
+      <div class="pipeline-grid" style="margin-bottom:0">
+        <div class="pipe-item"><div class="pipe-dot pd-nuevo"></div><div class="pipe-num" id="panel-pipe-nuevo">—</div><div class="pipe-lbl">Nuevo</div></div>
+        <div class="pipe-item"><div class="pipe-dot pd-contactado"></div><div class="pipe-num" id="panel-pipe-contactado">—</div><div class="pipe-lbl">Contactado</div></div>
+        <div class="pipe-item"><div class="pipe-dot pd-calificado"></div><div class="pipe-num" id="panel-pipe-calificado">—</div><div class="pipe-lbl">Calificado</div></div>
+        <div class="pipe-item"><div class="pipe-dot pd-cliente"></div><div class="pipe-num" id="panel-pipe-cliente">—</div><div class="pipe-lbl">Cliente</div></div>
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <div class="panel-section-lbl">Inteligencia comercial</div>
+      <div class="insight-list" id="panel-insights"></div>
+
     </div>
   </div>
 </div>
@@ -450,21 +521,8 @@ tr:hover .row-actions { opacity: 1; }
         <textarea class="notas-input" id="modal-notas" placeholder="Agregar notas sobre este prospecto..."></textarea>
       </div>
     </div>
-    <div id="vibe-section" style="padding:0 24px 16px;display:none">
-      <div style="background:var(--gray-50);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="font-size:13px;font-weight:500;color:var(--navy)">Contactos encontrados</div>
-          <div id="vibe-status" style="font-size:12px;color:var(--gray-400)"></div>
-        </div>
-        <div id="vibe-results"></div>
-      </div>
-    </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Cancelar</button>
-      <button class="btn" onclick="buscarContactoVibe()" id="btn-vibe" style="border-color:#00AEEF;color:#0D1F3C">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        Buscar contacto
-      </button>
       <button class="btn btn-primary" onclick="saveModal()">Guardar cambios</button>
     </div>
   </div>
@@ -487,8 +545,19 @@ const VENDEDORES = [
   { id: 'ulises',      nombre: 'Ulises',      color: '#7AB3D4' },
 ]
 
-let currentUser = null
+/* Inteligencia de mercado 2026 — fuente: Pronóstico Menlun / SM Soluciones */
+const SECTOR_INTEL = {
+  'Bebidas':      { dinamismo: 'Muy alta',   dynClass: 'dyn-muyalta', color: '#378ADD', producto: 'CIP + Neutros',            nota: 'Sector #1 en 2026. Mayor CAGR proyectado. Digitalización y CIP avanzado.' },
+  'Alimentos':    { dinamismo: 'Alta',       dynClass: 'dyn-alta',    color: '#1D9E75', producto: 'Foam + Desinfectantes',     nota: 'Volumen histórico alto. Auditorías impulsan estandarización.' },
+  'Farmaceutico': { dinamismo: 'Media-alta', dynClass: 'dyn-media',   color: '#7F77DD', producto: 'Desinfectantes premium',   nota: 'Normativa estricta. Contratos de largo plazo.' },
+  'Hoteles':      { dinamismo: 'Media',      dynClass: 'dyn-media',   color: '#EF9F27', producto: 'CIP + Alcalinos',           nota: 'Estacional. Crece con turismo y certificaciones.' },
+  'Hospitales':   { dinamismo: 'Selectiva',  dynClass: 'dyn-select',  color: '#888780', producto: 'Desinfectantes',           nota: 'Licitaciones públicas. Ciclo largo de venta.' },
+  'Institucional':{ dinamismo: 'Selectiva',  dynClass: 'dyn-select',  color: '#888780', producto: 'Alcalinos + Ácidos',       nota: 'Procesos lentos. Ideal para volumen garantizado.' },
+}
 
+const TIER_VALUES = { 'Platino': 2500000, 'Oro': 500000, 'Plata': 350000, 'Bronce': 100000 }
+
+let currentUser = null
 let allData = []
 let filtered = []
 let currentPage = 1
@@ -604,8 +673,7 @@ function openMaps(id) {
   const nombre = encodeURIComponent((r.nombre_establecimiento||r.razon_social||'').replace(/['"]/g,''))
   const municipio = encodeURIComponent(r.municipio||'')
   const estado = encodeURIComponent(r.estado||'')
-  const query = `${nombre} ${municipio} ${estado}`
-  window.open(`https://www.google.com/maps/search/${query}`, '_blank')
+  window.open(`https://www.google.com/maps/search/${nombre} ${municipio} ${estado}`, '_blank')
 }
 
 function setEstatus(val) {
@@ -625,61 +693,6 @@ function setEstatus(val) {
     }
   })
 }
-
-async function buscarContactoVibe() {
-  const empresa = document.getElementById('modal-empresa').textContent
-  const municipio = document.getElementById('modal-municipio').textContent
-  if (!empresa || empresa === '—') return
-
-  const btn = document.getElementById('btn-vibe')
-  btn.textContent = 'Buscando...'
-  btn.disabled = true
-
-  document.getElementById('vibe-section').style.display = 'block'
-  document.getElementById('vibe-status').textContent = 'Consultando base de datos...'
-  document.getElementById('vibe-results').innerHTML = '<div style="text-align:center;padding:16px;color:var(--gray-400);font-size:13px">⏳ Buscando contactos...</div>'
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: 'Eres un asistente que busca información de contacto de empresas mexicanas. Responde SOLO en JSON con este formato exacto: {"encontrado": true/false, "contactos": [{"nombre": "...", "cargo": "...", "email": "...", "telefono": "..."}], "mensaje": "..."}. Si no tienes datos reales, pon encontrado:false.',
-        messages: [{ role: 'user', content: `Busca el contacto de decisión (director de compras, gerente de operaciones o similar) de la empresa: "${empresa}" ubicada en ${municipio}. Responde solo JSON.` }]
-      })
-    })
-    const data = await res.json()
-    const text = data.content?.[0]?.text || '{}'
-    let result
-    try { result = JSON.parse(text.replace(/```json|```/g,'').trim()) }
-    catch(e) { result = {encontrado: false, mensaje: 'Sin datos disponibles'} }
-
-    if (result.encontrado && result.contactos?.length > 0) {
-      document.getElementById('vibe-status').textContent = `${result.contactos.length} contacto(s) encontrado(s)`
-      document.getElementById('vibe-results').innerHTML = result.contactos.map(c => `
-        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-          <div style="font-weight:500;font-size:13px;color:var(--navy)">${c.nombre||'—'}</div>
-          <div style="font-size:12px;color:var(--gray-400);margin:2px 0">${c.cargo||'—'}</div>
-          <div style="display:flex;gap:12px;margin-top:6px">
-            ${c.email?`<a href="mailto:${c.email}" style="font-size:12px;color:#00AEEF;text-decoration:none">✉ ${c.email}</a>`:''}
-            ${c.telefono?`<a href="tel:${c.telefono}" style="font-size:12px;color:#00AEEF;text-decoration:none">📞 ${c.telefono}</a>`:''}
-          </div>
-        </div>
-      `).join('')
-    } else {
-      document.getElementById('vibe-status').textContent = ''
-      document.getElementById('vibe-results').innerHTML = `<div style="font-size:13px;color:var(--gray-400);padding:8px 0">${result.mensaje||'No se encontraron contactos para esta empresa.'}</div>`
-    }
-  } catch(e) {
-    document.getElementById('vibe-results').innerHTML = '<div style="font-size:13px;color:var(--coral)">Error al buscar contactos. Intenta de nuevo.</div>'
-  }
-
-  btn.textContent = 'Buscar contacto'
-  btn.disabled = false
-}
-
 
 function loadEstados() {
   const estados = [...new Set(allData.map(r => r.estado).filter(Boolean))].sort()
@@ -706,6 +719,90 @@ function updateMetrics(data) {
   document.getElementById('z-sinzona').textContent = data.filter(r=>r.zona_menlun==='Sin zona'||!r.zona_menlun).length.toLocaleString()
 }
 
+function formatMXN(n) {
+  if (n >= 1000000000) return '$' + (n/1000000000).toFixed(1) + 'B'
+  if (n >= 1000000) return '$' + Math.round(n/1000000) + 'M'
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'K'
+  return '$' + n.toLocaleString()
+}
+
+function updateMarketPanel(estado) {
+  const panel = document.getElementById('market-panel')
+  if (!estado) { panel.style.display = 'none'; return }
+
+  const data = allData.filter(r => r.estado === estado)
+  panel.style.display = 'flex'
+  document.getElementById('panel-estado-name').textContent = estado
+
+  // Métricas
+  const total = data.length
+  const platino = data.filter(r => r.tier === 'Platino').length
+  const oro = data.filter(r => r.tier === 'Oro').length
+  const clientes = data.filter(r => r.estatus === 'Cliente').length
+  const opp = data.reduce((sum, r) => sum + (TIER_VALUES[r.tier] || 100000), 0)
+
+  document.getElementById('panel-total').textContent = total.toLocaleString()
+  document.getElementById('panel-platino').textContent = platino.toLocaleString()
+  document.getElementById('panel-oro').textContent = oro.toLocaleString()
+  document.getElementById('panel-clientes').textContent = clientes.toLocaleString()
+  document.getElementById('panel-opp').textContent = formatMXN(opp)
+
+  // Sectores
+  const sectorCounts = {}
+  data.forEach(r => { if (r.sector) sectorCounts[r.sector] = (sectorCounts[r.sector] || 0) + 1 })
+  const sectors = Object.entries(sectorCounts).sort((a,b) => b[1]-a[1])
+  const maxCount = sectors[0]?.[1] || 1
+
+  document.getElementById('panel-sectors').innerHTML = sectors.map(([s, count]) => {
+    const intel = SECTOR_INTEL[s] || { dinamismo: '—', dynClass: 'dyn-select', color: '#888780' }
+    const barPct = Math.round(count / maxCount * 100)
+    return `
+      <div class="p-sector-row">
+        <span class="p-sector-name" title="${s}">${s}</span>
+        <div class="p-sector-bar-wrap"><div class="p-sector-bar" style="width:${barPct}%;background:${intel.color}"></div></div>
+        <span class="p-sector-count">${count}</span>
+        <span class="p-dyn-tag ${intel.dynClass}">${intel.dinamismo}</span>
+      </div>`
+  }).join('')
+
+  // Pipeline
+  document.getElementById('panel-pipe-nuevo').textContent = data.filter(r => !r.estatus || r.estatus === 'Nuevo').length
+  document.getElementById('panel-pipe-contactado').textContent = data.filter(r => r.estatus === 'Contactado').length
+  document.getElementById('panel-pipe-calificado').textContent = data.filter(r => r.estatus === 'Calificado').length
+  document.getElementById('panel-pipe-cliente').textContent = clientes
+
+  // Insights dinámicos
+  const insights = []
+  const topSector = sectors[0]?.[0]
+  const topIntel = topSector ? SECTOR_INTEL[topSector] : null
+  const sinContactar = data.filter(r => !r.estatus || r.estatus === 'Nuevo').length
+  const pctSin = total > 0 ? Math.round(sinContactar / total * 100) : 0
+
+  if (topSector && topIntel) {
+    insights.push({ type: 'blue', icon: starSVG, text: `<b>${topSector} lidera</b> con ${sectors[0][1]} prospectos. Producto: ${topIntel.producto}.` })
+  }
+  if (pctSin > 50) {
+    insights.push({ type: 'amber', icon: boltSVG, text: `<b>${sinContactar} sin contactar</b> — ${pctSin}% del estado aún sin tocar.` })
+  } else if (pctSin > 0) {
+    insights.push({ type: 'amber', icon: boltSVG, text: `<b>${sinContactar} prospectos nuevos</b> por trabajar en este estado.` })
+  }
+  if (platino > 0) {
+    insights.push({ type: 'blue', icon: starSVG, text: `<b>${platino} Platino</b> en ${estado}. Visita prioritaria inmediata.` })
+  }
+  insights.push({ type: 'green', icon: trendSVG, text: `<b>CAGR 3.7–6.2%</b> mercado químico MX 2026. Bebidas y Procesados con mayor dinamismo.` })
+
+  document.getElementById('panel-insights').innerHTML = insights.slice(0,3).map(i =>
+    `<div class="insight-item">
+      <div class="insight-icon ii-${i.type}">${i.icon}</div>
+      <div class="insight-text">${i.text}</div>
+    </div>`
+  ).join('')
+}
+
+const starSVG = `<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+const boltSVG = `<svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+const trendSVG = `<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`
+
 function applyFilters() {
   const search = document.getElementById('search').value.toLowerCase()
   const tier = document.getElementById('f-tier').value
@@ -730,6 +827,8 @@ function applyFilters() {
   currentPage = 1
   document.getElementById('results-count').textContent =
     filtered.length !== allData.length ? `${filtered.length.toLocaleString()} resultados` : ''
+
+  updateMarketPanel(estado)
   renderTable()
 }
 
@@ -743,6 +842,7 @@ function clearFilters() {
   filtered = [...allData]
   currentPage = 1
   document.getElementById('results-count').textContent = ''
+  updateMarketPanel('')
   renderTable()
 }
 
@@ -781,7 +881,7 @@ function renderTable() {
   const tbody = document.getElementById('table-body')
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados con los filtros actuales</p></div></td></tr>`
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados con los filtros actuales</p></div></td></tr>`
     renderPagination()
     return
   }
@@ -802,7 +902,7 @@ function renderTable() {
       <td style="color:var(--gray-400);font-size:12px">${r.vendedor_asignado||'—'}</td>
       <td>
         <div class="row-actions">
-          <button class="row-btn" title="Ver en Google Maps" onclick="openMaps(${r.id})" style="color:#1A6BAF">
+          <button class="row-btn maps" title="Ver en Google Maps" onclick="openMaps(${r.id})">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </button>
           <button class="row-btn" title="Editar" onclick="openModal(${r.id})">✏️</button>
@@ -860,9 +960,6 @@ function openModal(id) {
   setEstatus(estatusVal)
   document.getElementById('modal-vendedor').value = r.vendedor_asignado || (currentUser?.nombre || '')
   document.getElementById('modal-notas').value = r.notas||''
-  document.getElementById('vibe-section').style.display = 'none'
-  document.getElementById('vibe-results').innerHTML = ''
-  document.getElementById('vibe-status').textContent = ''
   document.getElementById('modal').classList.add('open')
 }
 
@@ -928,16 +1025,14 @@ async function init() {
     renderTable()
     showToast(`Bienvenido ${currentUser?.nombre || ''} — ${allData.length.toLocaleString()} leads cargados`)
   } catch(e) {
-    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="11">Error cargando datos. Verifica la conexión.</td></tr>`
+    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">Error cargando datos. Verifica la conexión.</td></tr>`
   }
 }
-
 
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
 })
 
-// Always show login screen on load
 document.getElementById('login-screen').style.display = 'flex'
 </script>
 </body>
