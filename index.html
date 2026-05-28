@@ -180,6 +180,25 @@ tr:hover .row-actions { opacity: 1; }
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#0D1F3C 0%,#1A3A6B 100%);z-index:1000;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px" onerror="this.style.display='none'">
+    <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
+    <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
+    <div class="grid-login" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      ${VENDEDORES.map(v => `
+        <button onclick="login('${v.id}','${v.nombre}')" style="padding:12px;border-radius:10px;border:1.5px solid #E0EBF5;background:#F5F7FA;font-size:14px;font-weight:500;color:#0D1F3C;cursor:pointer;transition:all 0.15s;font-family:inherit"
+          onmouseover="this.style.background='#0D1F3C';this.style.color='#fff';this.style.borderColor='#0D1F3C'"
+          onmouseout="this.style.background='#F5F7FA';this.style.color='#0D1F3C';this.style.borderColor='#E0EBF5'">
+          ${v.nombre}
+        </button>
+      `).join('')}
+    </div>
+    <div style="margin-top:20px;font-size:12px;color:#B0BED0">PMPS · Operadora Química Menlun</div>
+  </div>
+</div>
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
@@ -194,10 +213,15 @@ tr:hover .row-actions { opacity: 1; }
   </div>
   <div class="topbar-right">
     <div class="total-pill">Total: <b id="total-count">—</b> prospectos</div>
+    <button class="btn" id="btn-mis-leads" onclick="toggleMisLeads()" style="border-color:#00AEEF;color:#0D1F3C">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mis leads
+    </button>
     <button class="btn" onclick="exportCSV()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Exportar CSV
+      Exportar
     </button>
+    <div id="user-avatar" style="width:34px;height:34px;border-radius:50%;background:#0D1F3C;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0" title="Cerrar sesión" onclick="logout()"></div>
   </div>
 </div>
 
@@ -401,12 +425,24 @@ const SUPABASE_URL = 'https://invwksntpqxsmkqycybf.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_MjgQ6mksY3klFMSzhu4QWg_ojA0rLQ7'
 const PAGE_SIZE = 100
 
+const VENDEDORES = [
+  { id: 'jose_carlos', nombre: 'José Carlos', color: '#0D1F3C' },
+  { id: 'arturo',      nombre: 'Arturo',      color: '#00AEEF' },
+  { id: 'daniel',      nombre: 'Daniel',      color: '#1A6BAF' },
+  { id: 'mary_tere',   nombre: 'Mary Tere',   color: '#4A90C4' },
+  { id: 'jesus',       nombre: 'Jesús',       color: '#2C5F8A' },
+  { id: 'ulises',      nombre: 'Ulises',      color: '#7AB3D4' },
+]
+
+let currentUser = null
+
 let allData = []
 let filtered = []
 let currentPage = 1
 let sortCol = 'id'
 let sortAsc = true
 let editingId = null
+let misLeadsMode = false
 
 const headers = {
   'apikey': SUPABASE_KEY,
@@ -431,6 +467,38 @@ async function fetchAll() {
     if (batch.length < batchSize) break
   }
   return all
+}
+
+function login(id, nombre) {
+  currentUser = { id, nombre }
+  localStorage.setItem('pmps_user', JSON.stringify(currentUser))
+  document.getElementById('login-screen').style.display = 'none'
+  const initials = nombre.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()
+  document.getElementById('user-avatar').textContent = initials
+  document.getElementById('user-avatar').title = `${nombre} — Cerrar sesión`
+  init()
+}
+
+function logout() {
+  if (!confirm('¿Cerrar sesión?')) return
+  currentUser = null
+  localStorage.removeItem('pmps_user')
+  location.reload()
+}
+
+function toggleMisLeads() {
+  misLeadsMode = !misLeadsMode
+  const btn = document.getElementById('btn-mis-leads')
+  if (misLeadsMode) {
+    btn.style.background = '#0D1F3C'
+    btn.style.color = '#fff'
+    btn.style.borderColor = '#0D1F3C'
+  } else {
+    btn.style.background = ''
+    btn.style.color = '#0D1F3C'
+    btn.style.borderColor = '#00AEEF'
+  }
+  applyFilters()
 }
 
 function openMaps(id) {
@@ -558,6 +626,7 @@ function applyFilters() {
     if (zona && r.zona_menlun !== zona) return false
     if (estado && r.estado !== estado) return false
     if (estatus && r.estatus !== estatus) return false
+    if (misLeadsMode && currentUser && r.vendedor_asignado !== currentUser.nombre) return false
     return true
   })
 
@@ -692,7 +761,7 @@ function openModal(id) {
   const estatusVal = r.estatus||'Nuevo'
   document.getElementById('modal-estatus').value = estatusVal
   setEstatus(estatusVal)
-  document.getElementById('modal-vendedor').value = r.vendedor_asignado||''
+  document.getElementById('modal-vendedor').value = r.vendedor_asignado || (currentUser?.nombre || '')
   document.getElementById('modal-notas').value = r.notas||''
   document.getElementById('vibe-section').style.display = 'none'
   document.getElementById('vibe-results').innerHTML = ''
@@ -760,7 +829,7 @@ async function init() {
     updateMetrics(allData)
     filtered = [...allData]
     renderTable()
-    showToast(`${allData.length.toLocaleString()} leads cargados`)
+    showToast(`Bienvenido ${currentUser?.nombre || ''} — ${allData.length.toLocaleString()} leads cargados`)
   } catch(e) {
     document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="11">Error cargando datos. Verifica la conexión.</td></tr>`
   }
@@ -771,7 +840,20 @@ document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
 })
 
-init()
+// Check saved session
+const savedUser = localStorage.getItem('pmps_user')
+if (savedUser) {
+  try {
+    const u = JSON.parse(savedUser)
+    login(u.id, u.nombre)
+  } catch(e) {
+    document.getElementById('login-screen').style.display = 'flex'
+  }
+} else {
+  // Render login buttons dynamically
+  const grid = document.querySelector('#login-screen .grid-login')
+  document.getElementById('login-screen').style.display = 'flex'
+}
 </script>
 </body>
 </html>
