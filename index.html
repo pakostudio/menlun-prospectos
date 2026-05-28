@@ -36,16 +36,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 /* TOPBAR */
 .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
 .topbar-left { display: flex; align-items: center; gap: 12px; }
-.logo-mark { width: 32px; height: 32px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-mark { width: 32px; height: 32px; background: #0D1F3C; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
 .logo-mark svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; }
 .logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
-.logo-text span { color: var(--green); }
+.logo-text span { color: #0D1F3C; }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 .total-pill { background: var(--gray-100); border-radius: var(--radius-pill); padding: 5px 14px; font-size: 13px; color: var(--gray-600); }
 .total-pill b { color: var(--gray-800); font-weight: 600; }
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-700); font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: var(--gray-50); }
-.btn-primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-primary { background: #0D1F3C; border-color: #0D1F3C; color: #fff; }
 .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
 
 /* METRICS */
@@ -55,7 +55,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .metric-val { font-size: 24px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
 .metric-sub { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
 .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.dot-total { background: var(--green); }
+.dot-total { background: #0D1F3C; }
 .dot-platino { background: var(--blue); }
 .dot-oro { background: var(--amber); }
 .dot-plata { background: var(--gray-400); }
@@ -66,12 +66,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
 .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--gray-400); fill: none; stroke-width: 2; pointer-events: none; }
 .search-input { width: 100%; padding: 7px 10px 7px 32px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); transition: all 0.15s; }
-.search-input:focus { outline: none; border-color: var(--green); background: var(--white); }
+.search-input:focus { outline: none; border-color: #0D1F3C; background: var(--white); }
 .filter-select { padding: 7px 28px 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; transition: all 0.15s; }
-.filter-select:focus { outline: none; border-color: var(--green); background-color: var(--white); }
+.filter-select:focus { outline: none; border-color: #0D1F3C; background-color: var(--white); }
 .active-filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-light); color: var(--green-dark); padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
-.filter-tag button { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
+.filter-tag button { background: none; border: none; cursor: pointer; color: #0D1F3C; font-size: 14px; line-height: 1; padding: 0 0 0 2px; }
 .results-count { font-size: 12px; color: var(--gray-400); margin-left: auto; white-space: nowrap; }
 
 /* LAYOUT */
@@ -137,7 +137,7 @@ tr:hover .row-actions { opacity: 1; }
 .estatus-select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
 .vendedor-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); }
 .notas-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 80px; resize: vertical; }
-.vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: var(--green); background: var(--white); }
+.vendedor-input:focus, .notas-input:focus, .estatus-select:focus { outline: none; border-color: #0D1F3C; background: var(--white); }
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
 .modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 .login-btn {
@@ -185,7 +185,7 @@ tr:hover .row-actions { opacity: 1; }
 .page-btns { display: flex; gap: 4px; }
 .page-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--white); color: var(--gray-600); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; transition: all 0.15s; }
 .page-btn:hover { background: var(--gray-50); border-color: var(--gray-200); }
-.page-btn.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+.page-btn.active { background: #0D1F3C; border-color: #0D1F3C; color: #fff; font-weight: 600; }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* TOAST */
@@ -194,7 +194,7 @@ tr:hover .row-actions { opacity: 1; }
 
 /* LOADING */
 .loading-row td { text-align: center; padding: 48px; color: var(--gray-400); font-size: 14px; }
-.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--gray-200); border-top-color: var(--green); border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--gray-200); border-top-color: #0D1F3C; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ZONA BARS */
@@ -220,7 +220,7 @@ tr:hover .row-actions { opacity: 1; }
 <!-- LOGIN SCREEN -->
 <div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#0D1F3C 0%,#1A3A6B 100%);z-index:1000;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:16px;padding:40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
-    <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px;border-radius:6px;padding:4px;background:#fff">
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:56px;margin-bottom:24px">
     
     <!-- STEP 1: SELECT NAME -->
     <div id="step-nombre">
@@ -258,7 +258,7 @@ tr:hover .row-actions { opacity: 1; }
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <img src="PMPS_logotipo.png" alt="PMPS" style="height:38px;width:auto;display:block;border-radius:4px;padding:2px;background:#fff">
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:38px;width:auto;display:block">
     <div style="width:1px;height:28px;background:var(--border);margin:0 8px"></div>
     <div>
       <div class="logo-text">Sistema de <span>Prospectos</span></div>
@@ -309,7 +309,7 @@ tr:hover .row-actions { opacity: 1; }
 
 <!-- ZONA BARS -->
 <div class="zona-row">
-  <div class="zona-item"><div class="zona-dot" style="background:var(--green)"></div><span class="zona-label">Centro</span><span class="zona-count" id="z-centro">—</span></div>
+  <div class="zona-item"><div class="zona-dot" style="background:#0D1F3C"></div><span class="zona-label">Centro</span><span class="zona-count" id="z-centro">—</span></div>
   <div class="zona-item"><div class="zona-dot" style="background:var(--blue)"></div><span class="zona-label">Norte</span><span class="zona-count" id="z-norte">—</span></div>
   <div class="zona-item"><div class="zona-dot" style="background:var(--amber)"></div><span class="zona-label">Bajío</span><span class="zona-count" id="z-bajio">—</span></div>
   <div class="zona-item"><div class="zona-dot" style="background:var(--coral)"></div><span class="zona-label">Sur</span><span class="zona-count" id="z-sur">—</span></div>
