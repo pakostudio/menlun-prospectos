@@ -183,11 +183,13 @@ tr:hover .row-actions { opacity: 1; }
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+    <img src="PMPS_logotipo.png" alt="PMPS" style="height:38px;width:auto;display:block;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'">
+    <div id="logo-fallback" style="display:none;align-items:center;gap:8px">
+      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
     </div>
+    <div style="width:1px;height:28px;background:var(--border);margin:0 8px"></div>
     <div>
-      <div class="logo-text">MEN<span>LUN</span> Leads</div>
+      <div class="logo-text">Sistema de <span>Prospectos</span></div>
     </div>
   </div>
   <div class="topbar-right">
@@ -421,8 +423,9 @@ async function fetchAll() {
       `${SUPABASE_URL}/rest/v1/leads_menlun?select=id,nombre_establecimiento,razon_social,giro,sector,tier,municipio,estado,zona_menlun,estatus,vendedor_asignado,notas,telefono,email,facturacion_estimada&order=id.asc&offset=${from}&limit=${batchSize}`,
       { headers }
     )
+    if (!res.ok) break
     const batch = await res.json()
-    if (!batch || batch.length === 0) break
+    if (!batch || !Array.isArray(batch) || batch.length === 0) break
     all = all.concat(batch)
     from += batchSize
     if (batch.length < batchSize) break
@@ -430,7 +433,7 @@ async function fetchAll() {
   return all
 }
 
-async function function openMaps(id) {
+function openMaps(id) {
   const r = allData.find(x=>x.id===id)
   if (!r) return
   const nombre = encodeURIComponent((r.nombre_establecimiento||r.razon_social||'').replace(/['"]/g,''))
@@ -512,18 +515,6 @@ async function buscarContactoVibe() {
   btn.disabled = false
 }
 
-init() {
-  try {
-    allData = await fetchAll()
-    loadEstados()
-    updateMetrics(allData)
-    filtered = [...allData]
-    renderTable()
-    showToast(`${allData.length.toLocaleString()} leads cargados`)
-  } catch(e) {
-    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">Error cargando datos. Verifica la conexión.</td></tr>`
-  }
-}
 
 function loadEstados() {
   const estados = [...new Set(allData.map(r => r.estado).filter(Boolean))].sort()
@@ -761,6 +752,20 @@ function showToast(msg) {
   t.classList.add('show')
   setTimeout(()=>t.classList.remove('show'), 2800)
 }
+
+async function init() {
+  try {
+    allData = await fetchAll()
+    loadEstados()
+    updateMetrics(allData)
+    filtered = [...allData]
+    renderTable()
+    showToast(`${allData.length.toLocaleString()} leads cargados`)
+  } catch(e) {
+    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="11">Error cargando datos. Verifica la conexión.</td></tr>`
+  }
+}
+
 
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
