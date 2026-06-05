@@ -23,6 +23,7 @@
   --gray-600: #5F5E5A;
   --gray-800: #2C2C2A;
   --white: #FFFFFF;
+  --gray-700: #3D3D3A;
   --border: rgba(0,0,0,0.08);
   --shadow: 0 1px 3px rgba(0,0,0,0.08);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
@@ -534,7 +535,8 @@ tr:hover .row-actions { opacity: 1; }
 
 <script>
 const SUPABASE_URL = 'https://invwksntpqxsmkqycybf.supabase.co'
-const SUPABASE_KEY = 'sb_publishable_MjgQ6mksY3klFMSzhu4QWg_ojA0rLQ7'
+// ⚠️ REEMPLAZA con tu anon key real desde: supabase.com/dashboard/project/invwksntpqxsmkqycybf/settings/api
+const SUPABASE_KEY = 'TU_ANON_KEY_JWT_AQUI'
 const PAGE_SIZE = 100
 
 const VENDEDORES = [
@@ -583,7 +585,10 @@ async function fetchAll() {
       `${SUPABASE_URL}/rest/v1/leads_menlun?select=id,nombre_establecimiento,razon_social,giro,sector,tier,municipio,estado,zona_menlun,estatus,vendedor_asignado,notas,telefono,email,facturacion_estimada&order=id.asc&offset=${from}&limit=${batchSize}`,
       { headers }
     )
-    if (!res.ok) break
+    if (!res.ok) {
+      const errText = await res.text().catch(() => res.status)
+      throw new Error(`Supabase ${res.status}: ${errText}`)
+    }
     const batch = await res.json()
     if (!batch || !Array.isArray(batch) || batch.length === 0) break
     all = all.concat(batch)
@@ -1028,15 +1033,15 @@ async function init() {
     renderTable()
     showToast(`Bienvenido ${currentUser?.nombre || ''} — ${allData.length.toLocaleString()} leads cargados`)
   } catch(e) {
-    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">Error cargando datos. Verifica la conexión.</td></tr>`
+    console.error('Error init:', e)
+    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">⚠️ Error cargando datos: ${e.message || 'Verifica la API key y la conexión.'}</td></tr>`
+    showToast('Error de conexión — revisa la consola')
   }
 }
 
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
 })
-
-document.getElementById('login-screen').style.display = 'flex'
 </script>
 </body>
 </html>
