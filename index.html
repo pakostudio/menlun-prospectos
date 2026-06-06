@@ -535,8 +535,7 @@ tr:hover .row-actions { opacity: 1; }
 
 <script>
 const SUPABASE_URL = 'https://invwksntpqxsmkqycybf.supabase.co'
-// ⚠️ REEMPLAZA con tu anon key real desde: supabase.com/dashboard/project/invwksntpqxsmkqycybf/settings/api
-const SUPABASE_KEY = 'TU_ANON_KEY_JWT_AQUI'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imludndrc250cHF4c21rcXljeWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MTA1MTAsImV4cCI6MjA5NTQ4NjUxMH0.DYYGW7Uwxhg_i2D6tyKOnP4SOO89_clx8T-_ZqXnLuA'
 const PAGE_SIZE = 100
 
 const VENDEDORES = [
@@ -585,10 +584,7 @@ async function fetchAll() {
       `${SUPABASE_URL}/rest/v1/leads_menlun?select=id,nombre_establecimiento,razon_social,giro,sector,tier,municipio,estado,zona_menlun,estatus,vendedor_asignado,notas,telefono,email,facturacion_estimada&order=id.asc&offset=${from}&limit=${batchSize}`,
       { headers }
     )
-    if (!res.ok) {
-      const errText = await res.text().catch(() => res.status)
-      throw new Error(`Supabase ${res.status}: ${errText}`)
-    }
+    if (!res.ok) { const errText = await res.text().catch(() => res.status); throw new Error(`Supabase ${res.status}: ${errText}`) }
     const batch = await res.json()
     if (!batch || !Array.isArray(batch) || batch.length === 0) break
     all = all.concat(batch)
@@ -1033,15 +1029,14 @@ async function init() {
     renderTable()
     showToast(`Bienvenido ${currentUser?.nombre || ''} — ${allData.length.toLocaleString()} leads cargados`)
   } catch(e) {
-    console.error('Error init:', e)
-    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">⚠️ Error cargando datos: ${e.message || 'Verifica la API key y la conexión.'}</td></tr>`
-    showToast('Error de conexión — revisa la consola')
+    document.getElementById('table-body').innerHTML = `<tr class="loading-row"><td colspan="10">Error cargando datos. Verifica la conexión.</td></tr>`
   }
 }
 
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal()
 })
+
 </script>
 </body>
 </html>
