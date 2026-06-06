@@ -241,6 +241,7 @@ tr:hover .row-actions { opacity: 1; }
       <div style="font-size:20px;font-weight:600;color:#0D1F3C;margin-bottom:6px">Sistema de Prospectos</div>
       <div style="font-size:14px;color:#7A8599;margin-bottom:28px">Selecciona tu nombre para continuar</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button onclick="selectNombre('administrador','Administrador')" class="login-btn" style="grid-column:1/-1;background:#0D1F3C;color:#fff;border-color:#0D1F3C;font-weight:600">⚙️ Administrador</button>
         <button onclick="selectNombre('jose_carlos','José Carlos')" class="login-btn">José Carlos</button>
         <button onclick="selectNombre('arturo','Arturo')" class="login-btn">Arturo</button>
         <button onclick="selectNombre('daniel','Daniel')" class="login-btn">Daniel</button>
@@ -278,6 +279,10 @@ tr:hover .row-actions { opacity: 1; }
   </div>
   <div class="topbar-right">
     <div class="total-pill">Total: <b id="total-count">—</b> prospectos</div>
+    <button class="btn" id="btn-admin-panel" onclick="openAdminPanel()" style="display:none;background:#0D1F3C;color:#fff;border-color:#0D1F3C">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+      Panel Admin
+    </button>
     <button class="btn" id="btn-mis-leads" onclick="toggleMisLeads()" style="border-color:#00AEEF;color:#0D1F3C">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Mis leads
@@ -530,6 +535,72 @@ tr:hover .row-actions { opacity: 1; }
   </div>
 </div>
 
+<!-- MODAL ADMIN PANEL -->
+<div class="modal-overlay" id="modal-admin">
+  <div class="modal" style="max-width:600px;max-height:90vh;overflow-y:auto">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ Panel de Administrador</div>
+      <button class="modal-close" onclick="closeAdminPanel()">×</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- TABS -->
+      <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px">
+        <button onclick="switchAdminTab('usuarios')" id="atab-usuarios" style="padding:8px 18px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2px solid #0D1F3C;color:#0D1F3C;cursor:pointer">👥 Usuarios</button>
+        <button onclick="switchAdminTab('reasignar')" id="atab-reasignar" style="padding:8px 18px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;color:var(--gray-400);cursor:pointer">🔄 Reasignar</button>
+        <button onclick="switchAdminTab('claves')" id="atab-claves" style="padding:8px 18px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;color:var(--gray-400);cursor:pointer">🔑 Claves</button>
+      </div>
+
+      <!-- TAB: USUARIOS -->
+      <div id="apanel-usuarios">
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:14px">Lista de usuarios activos. Puedes editar nombre o eliminar.</div>
+        <div id="admin-users-list"></div>
+        <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px">➕ Agregar nuevo usuario</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <input class="vendedor-input" id="new-user-id" placeholder="ID (ej: carlos, nuevousuario)" style="margin:0">
+            <input class="vendedor-input" id="new-user-nombre" placeholder="Nombre completo" style="margin:0">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+            <input class="vendedor-input" id="new-user-pin" placeholder="PIN de 4 dígitos" maxlength="4" style="margin:0">
+            <button class="btn btn-primary btn-sm" onclick="addUser()" style="margin:0">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: REASIGNAR -->
+      <div id="apanel-reasignar" style="display:none">
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:14px">Mueve todos los prospectos de un vendedor a otro.</div>
+        <div class="modal-field">
+          <div class="modal-label">Vendedor origen (de quién mover)</div>
+          <select class="estatus-select" id="reasignar-origen" onchange="previewReasignar()">
+            <option value="">— Selecciona —</option>
+          </select>
+        </div>
+        <div class="modal-field" id="reasignar-preview-wrap" style="display:none">
+          <div id="reasignar-preview" style="background:var(--gray-50);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--gray-600);margin-bottom:12px"></div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Vendedor destino (a quién asignar)</div>
+          <select class="estatus-select" id="reasignar-destino">
+            <option value="">— Selecciona —</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-primary" onclick="ejecutarReasignar()" style="flex:1">Reasignar todos</button>
+        </div>
+      </div>
+
+      <!-- TAB: CLAVES -->
+      <div id="apanel-claves" style="display:none">
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:14px">Cambia el PIN de cualquier usuario.</div>
+        <div id="admin-pins-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -595,6 +666,7 @@ async function fetchAll() {
 }
 
 const PINS = {
+  'administrador': '0000',
   'jose_carlos': '1234',
   'arturo':      '2345',
   'daniel':      '3456',
@@ -604,6 +676,8 @@ const PINS = {
   'rocio':       '7890',
   'invitado':    '0000',
 }
+
+const isAdmin = () => currentUser?.id === 'administrador'
 
 let pendingUser = null
 
@@ -631,7 +705,7 @@ function pinNext(el, nextId) {
 function pinCheck() {
   const pin = ['pin1','pin2','pin3','pin4'].map(id => document.getElementById(id).value).join('')
   if (pin.length < 4) return
-  const correct = PINS[pendingUser?.id]
+  const correct = (typeof PINS_LIVE !== 'undefined' ? PINS_LIVE : PINS)[pendingUser?.id]
   if (pin === correct) {
     login(pendingUser.id, pendingUser.nombre)
   } else {
@@ -645,8 +719,19 @@ function login(id, nombre) {
   currentUser = { id, nombre }
   document.getElementById('login-screen').style.display = 'none'
   const initials = nombre.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()
-  document.getElementById('user-avatar').textContent = initials
-  document.getElementById('user-avatar').title = `${nombre} — Cerrar sesión`
+  const avatar = document.getElementById('user-avatar')
+  if (isAdmin()) {
+    avatar.textContent = '⚙️'
+    avatar.style.background = '#0D1F3C'
+    avatar.title = 'Administrador — Cerrar sesión'
+    document.getElementById('btn-admin-panel').style.display = 'inline-flex'
+    document.getElementById('btn-mis-leads').style.display = 'none'
+  } else {
+    avatar.textContent = initials
+    avatar.title = `${nombre} — Cerrar sesión`
+    document.getElementById('btn-admin-panel').style.display = 'none'
+    document.getElementById('btn-mis-leads').style.display = 'inline-flex'
+  }
   init()
 }
 
@@ -910,6 +995,7 @@ function renderTable() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </button>
           <button class="row-btn" title="Editar" onclick="openModal(${r.id})">✏️</button>
+          ${isAdmin() ? `<button class="row-btn" title="Reasignar vendedor" onclick="openReasignarRow(${r.id})" style="color:#0D1F3C">👤</button>` : ''}
         </div>
       </td>
     </tr>
@@ -1033,8 +1119,215 @@ async function init() {
   }
 }
 
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal')) closeModal()
+// ══════════════════════════════════════════
+// ADMIN — gestión de usuarios, claves, reasignación
+// ══════════════════════════════════════════
+
+// PINS en memoria (persisten en sesión)
+let PINS_LIVE = {
+  'administrador': '0000',
+  'jose_carlos': '1234',
+  'arturo':      '2345',
+  'daniel':      '3456',
+  'mary_tere':   '4567',
+  'jesus':       '5678',
+  'ulises':      '6789',
+  'rocio':       '7890',
+  'invitado':    '0000',
+}
+
+let USERS_LIVE = [
+  { id: 'jose_carlos', nombre: 'José Carlos' },
+  { id: 'arturo',      nombre: 'Arturo' },
+  { id: 'daniel',      nombre: 'Daniel' },
+  { id: 'mary_tere',   nombre: 'Mary Tere' },
+  { id: 'jesus',       nombre: 'Jesús' },
+  { id: 'ulises',      nombre: 'Ulises' },
+  { id: 'rocio',       nombre: 'Rocío' },
+]
+
+function openAdminPanel() {
+  renderAdminUsers()
+  renderAdminPins()
+  renderReasignarSelects()
+  document.getElementById('modal-admin').classList.add('open')
+}
+
+function closeAdminPanel() {
+  document.getElementById('modal-admin').classList.remove('open')
+  // Reconstruir botones de login con usuarios actualizados
+  rebuildLoginButtons()
+}
+
+function switchAdminTab(tab) {
+  ;['usuarios','reasignar','claves'].forEach(t => {
+    document.getElementById('apanel-'+t).style.display = t===tab ? 'block' : 'none'
+    const btn = document.getElementById('atab-'+t)
+    btn.style.borderBottomColor = t===tab ? '#0D1F3C' : 'transparent'
+    btn.style.color = t===tab ? '#0D1F3C' : 'var(--gray-400)'
+  })
+}
+
+function renderAdminUsers() {
+  const list = document.getElementById('admin-users-list')
+  list.innerHTML = USERS_LIVE.map(u => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <input value="${u.nombre}" id="uname-${u.id}"
+        style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--gray-50)"
+        onchange="updateUserName('${u.id}', this.value)">
+      <span style="font-size:11px;color:var(--gray-400);min-width:80px">ID: ${u.id}</span>
+      <button onclick="deleteUser('${u.id}')"
+        style="background:none;border:1px solid #fca5a5;border-radius:6px;padding:5px 10px;color:#dc2626;font-size:12px;cursor:pointer">
+        Eliminar
+      </button>
+    </div>
+  `).join('')
+}
+
+function renderAdminPins() {
+  const list = document.getElementById('admin-pins-list')
+  const allUsers = [{ id:'administrador', nombre:'Administrador' }, ...USERS_LIVE, { id:'invitado', nombre:'Invitado' }]
+  list.innerHTML = allUsers.map(u => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="flex:1;font-size:13px;font-weight:500">${u.nombre}</span>
+      <input type="text" maxlength="4" value="${PINS_LIVE[u.id]||''}" id="pin-edit-${u.id}"
+        style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:'DM Mono',monospace;text-align:center;background:var(--gray-50)"
+        placeholder="••••">
+      <button onclick="savePin('${u.id}')"
+        style="background:#0D1F3C;border:none;border-radius:6px;padding:6px 12px;color:#fff;font-size:12px;cursor:pointer">
+        Guardar
+      </button>
+    </div>
+  `).join('')
+}
+
+function savePin(userId) {
+  const input = document.getElementById('pin-edit-'+userId)
+  const newPin = input.value.trim()
+  if (!/^\d{4}$/.test(newPin)) { showToast('El PIN debe ser exactamente 4 dígitos'); return }
+  PINS_LIVE[userId] = newPin
+  showToast(`PIN de ${USERS_LIVE.find(u=>u.id===userId)?.nombre||userId} actualizado ✓`)
+}
+
+function updateUserName(userId, newName) {
+  const u = USERS_LIVE.find(x=>x.id===userId)
+  if (u) u.nombre = newName
+  showToast(`Nombre actualizado a "${newName}"`)
+}
+
+function deleteUser(userId) {
+  const u = USERS_LIVE.find(x=>x.id===userId)
+  if (!confirm(`¿Eliminar a ${u?.nombre}? Sus prospectos quedarán sin vendedor asignado.`)) return
+  USERS_LIVE = USERS_LIVE.filter(x=>x.id!==userId)
+  delete PINS_LIVE[userId]
+  renderAdminUsers()
+  renderAdminPins()
+  showToast(`Usuario ${u?.nombre} eliminado`)
+}
+
+function addUser() {
+  const id = document.getElementById('new-user-id').value.trim().toLowerCase().replace(/\s+/g,'_')
+  const nombre = document.getElementById('new-user-nombre').value.trim()
+  const pin = document.getElementById('new-user-pin').value.trim()
+  if (!id || !nombre) { showToast('ID y nombre son requeridos'); return }
+  if (!/^\d{4}$/.test(pin)) { showToast('El PIN debe ser exactamente 4 dígitos'); return }
+  if (USERS_LIVE.find(u=>u.id===id)) { showToast('Ya existe un usuario con ese ID'); return }
+  USERS_LIVE.push({ id, nombre })
+  PINS_LIVE[id] = pin
+  document.getElementById('new-user-id').value = ''
+  document.getElementById('new-user-nombre').value = ''
+  document.getElementById('new-user-pin').value = ''
+  renderAdminUsers()
+  renderAdminPins()
+  renderReasignarSelects()
+  rebuildLoginButtons()
+  showToast(`Usuario ${nombre} agregado ✓`)
+}
+
+function rebuildLoginButtons() {
+  const grid = document.querySelector('#step-nombre div[style*="grid"]')
+  if (!grid) return
+  grid.innerHTML = `
+    <button onclick="selectNombre('administrador','Administrador')" class="login-btn" style="grid-column:1/-1;background:#0D1F3C;color:#fff;border-color:#0D1F3C;font-weight:600">⚙️ Administrador</button>
+    ${USERS_LIVE.map(u => `<button onclick="selectNombre('${u.id}','${u.nombre}')" class="login-btn">${u.nombre}</button>`).join('')}
+    <button onclick="selectNombre('invitado','Invitado')" class="login-btn" style="grid-column:1/-1;background:#F5F7FA;color:#7A8599;border-color:#CDD3DE">Invitado</button>
+  `
+}
+
+function renderReasignarSelects() {
+  ;['reasignar-origen','reasignar-destino'].forEach(selId => {
+    const sel = document.getElementById(selId)
+    sel.innerHTML = '<option value="">— Selecciona —</option>' +
+      USERS_LIVE.map(u => `<option value="${u.nombre}">${u.nombre}</option>`).join('')
+  })
+}
+
+function previewReasignar() {
+  const origen = document.getElementById('reasignar-origen').value
+  if (!origen) { document.getElementById('reasignar-preview-wrap').style.display = 'none'; return }
+  const count = allData.filter(r => r.vendedor_asignado === origen).length
+  const preview = document.getElementById('reasignar-preview')
+  preview.innerHTML = `<b>${count}</b> prospectos asignados a <b>${origen}</b>`
+  document.getElementById('reasignar-preview-wrap').style.display = 'block'
+}
+
+async function ejecutarReasignar() {
+  const origen = document.getElementById('reasignar-origen').value
+  const destino = document.getElementById('reasignar-destino').value
+  if (!origen || !destino) { showToast('Selecciona origen y destino'); return }
+  if (origen === destino) { showToast('Origen y destino no pueden ser iguales'); return }
+  const afectados = allData.filter(r => r.vendedor_asignado === origen)
+  if (!afectados.length) { showToast(`${origen} no tiene prospectos asignados`); return }
+  if (!confirm(`¿Mover ${afectados.length} prospectos de ${origen} → ${destino}?`)) return
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/leads_menlun?vendedor_asignado=eq.${encodeURIComponent(origen)}`,
+      { method: 'PATCH', headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ vendedor_asignado: destino }) }
+    )
+    if (res.ok || res.status === 204) {
+      afectados.forEach(r => {
+        const idx = allData.findIndex(x=>x.id===r.id)
+        if (idx>=0) allData[idx].vendedor_asignado = destino
+      })
+      renderTable()
+      previewReasignar()
+      showToast(`${afectados.length} prospectos reasignados a ${destino} ✓`)
+    } else {
+      showToast('Error al reasignar')
+    }
+  } catch(e) { showToast('Error de conexión') }
+}
+
+async function openReasignarRow(id) {
+  const r = allData.find(x=>x.id===id)
+  if (!r) return
+  const opciones = USERS_LIVE.map(u => u.nombre).filter(n => n !== r.vendedor_asignado)
+  const destino = prompt(
+    `Reasignar "${r.nombre_establecimiento||r.razon_social}"\nActual: ${r.vendedor_asignado||'Sin asignar'}\n\nEscribe el nombre del nuevo vendedor:\n${opciones.join(', ')}`
+  )
+  if (!destino || !USERS_LIVE.find(u=>u.nombre===destino)) {
+    if (destino !== null) showToast('Nombre no válido — usa exactamente como aparece en la lista')
+    return
+  }
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/leads_menlun?id=eq.${id}`,
+      { method: 'PATCH', headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ vendedor_asignado: destino }) }
+    )
+    if (res.ok || res.status === 204) {
+      const idx = allData.findIndex(x=>x.id===id)
+      if (idx>=0) allData[idx].vendedor_asignado = destino
+      renderTable()
+      showToast(`Reasignado a ${destino} ✓`)
+    }
+  } catch(e) { showToast('Error de conexión') }
+}
+
+document.getElementById('modal-admin').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-admin')) closeAdminPanel()
 })
 
 </script>
