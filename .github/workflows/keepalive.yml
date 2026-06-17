@@ -1,0 +1,21 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"
+    - cron: "0 10 * * 4"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}"             -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imludndrc250cHF4c21rcXljeWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MTA1MTAsImV4cCI6MjA5NTQ4NjUxMH0.DYYGW7Uwxhg_i2D6tyKOnP4SOO89_clx8T-_ZqXnLuA"             -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imludndrc250cHF4c21rcXljeWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MTA1MTAsImV4cCI6MjA5NTQ4NjUxMH0.DYYGW7Uwxhg_i2D6tyKOnP4SOO89_clx8T-_ZqXnLuA"             "https://invwksntpqxsmkqycybf.supabase.co/rest/v1/leads_menlun?select=id&limit=1")
+          echo "Supabase responded: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "ERROR: $STATUS"
+            exit 1
+          fi
+          echo "OK - proyecto activo"
