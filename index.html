@@ -607,6 +607,7 @@ tr:hover .row-actions { opacity: 1; }
 <script>
 const SUPABASE_URL = 'https://invwksntpqxsmkqycybf.supabase.co'
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imludndrc250cHF4c21rcXljeWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MTA1MTAsImV4cCI6MjA5NTQ4NjUxMH0.DYYGW7Uwxhg_i2D6tyKOnP4SOO89_clx8T-_ZqXnLuA'
+const CRM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxACqAOQ4qjHH3UBaT6ekGN4iJ9TTl6cYSomXYLz-rLYMi1VtSS-s2qWuBSUK1I9Hsc/exec'
 const PAGE_SIZE = 100
 
 const VENDEDORES = [
@@ -996,6 +997,7 @@ function renderTable() {
           </button>
           <button class="row-btn" title="Editar" onclick="openModal(${r.id})">✏️</button>
           ${isAdmin() ? `<button class="row-btn" title="Reasignar vendedor" onclick="openReasignarRow(${r.id})" style="color:#0D1F3C">👤</button>` : ''}
+          ${puedeEnviarAlCRM(r) ? `<button class="row-btn" title="Enviar al CRM" onclick="enviarAlCRM(${r.id})" style="color:#0F6E56;border-color:#0F6E56;font-size:11px;width:auto;padding:0 8px;font-weight:600">📤 CRM</button>` : ''}
         </div>
       </td>
     </tr>
@@ -1329,6 +1331,93 @@ async function openReasignarRow(id) {
 document.getElementById('modal-admin').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-admin')) closeAdminPanel()
 })
+
+// ══════════════════════════════════════════
+// ENVIAR AL CRM
+// ══════════════════════════════════════════
+
+// Reglas de quién puede ver el botón:
+// - Admin: siempre puede enviar cualquier prospecto
+// - Vendedor: solo puede enviar prospectos que están asignados a él
+//   y que tienen estatus Contactado o Calificado
+function puedeEnviarAlCRM(r) {
+  if (!currentUser) return false
+  if (isAdmin()) return true
+  const esElVendedor = (r.vendedor_asignado || '') === currentUser.nombre
+  const estatusValido = r.estatus === 'Contactado' || r.estatus === 'Calificado'
+  return esElVendedor && estatusValido
+}
+
+async function enviarAlCRM(id) {
+  const r = allData.find(x => x.id === id)
+  if (!r) return
+
+  const empresa = r.nombre_establecimiento || r.razon_social || '—'
+  const vendedorDestino = isAdmin()
+    ? (r.vendedor_asignado || currentUser.nombre)
+    : currentUser.nombre
+
+  if (!confirm(`¿Enviar "${empresa}" al CRM?\n\nSe creará como lead activo asignado a ${vendedorDestino}.\nJosé Carlos recibirá la notificación para revisión.`)) return
+
+  // Construir payload compatible con el CRM (mismos campos que usa importarProspecto)
+  const lead = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    empresa,
+    contacto: r.contacto || '',
+    telefono: r.telefono || '',
+    email: r.email || '',
+    web: '',
+    etapa: 'Prospecto',
+    temperatura: '~ Tibio',
+    fuente: 'Directorio MENLUN',
+    valor: r.facturacion_estimada || '0',
+    responsable: vendedorDestino,
+    ultimo_movimiento: new Date().toISOString().split('T')[0],
+    notas: [
+      r.giro || '',
+      r.sector || '',
+      r.tier ? 'Tier: ' + r.tier : '',
+      r.municipio && r.estado ? r.municipio + ', ' + r.estado : '',
+      r.zona_menlun ? 'Zona: ' + r.zona_menlun : '',
+      r.notas || ''
+    ].filter(Boolean).join(' · '),
+    seguimientos: []
+  }
+
+  showToast('Enviando al CRM...')
+
+  try {
+    const payload = { ...lead, seguimientos: JSON.stringify([]) }
+    const res = await fetch(CRM_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'upsert', tab: 'prospectos', data: payload }),
+      headers: { 'Content-Type': 'text/plain' }
+    })
+    const data = await res.json()
+
+    if (data.ok) {
+      // Marcar en Supabase como "Cliente" para que no se vuelva a enviar
+      await fetch(`${SUPABASE_URL}/rest/v1/leads_menlun?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ estatus: 'Cliente', notas: (r.notas ? r.notas + ' | ' : '') + 'Enviado al CRM el ' + new Date().toLocaleDateString('es-MX') })
+      })
+      // Actualizar en memoria
+      const idx = allData.findIndex(x => x.id === id)
+      if (idx >= 0) {
+        allData[idx].estatus = 'Cliente'
+        allData[idx].notas = lead.notas
+      }
+      applyFilters()
+      showToast(`✓ "${empresa}" enviado al CRM — asignado a ${vendedorDestino}`)
+    } else {
+      showToast('Error al enviar al CRM: ' + (data.error || 'intenta de nuevo'))
+    }
+  } catch (e) {
+    showToast('Error de conexión al enviar al CRM')
+    console.error(e)
+  }
+}
 
 </script>
 </body>
